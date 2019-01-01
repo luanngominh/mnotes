@@ -1,16 +1,15 @@
 include .env-example
 
-.PHONY: build migrator
+.PHONY: build migrator dev local-env local-env-down test
 
 build:
 	go build -o bin/mnotes cmd/mnotes/main.go
 
 migrate:
-	goose postgres "host=${DB_HOST} \
+	goose -dir migration postgres "host=${DB_HOST} \
 			  user=${DB_USER} \
 			  dbname=${DB_NAME} sslmode=disable \
-			  password=${DB_PASSWORD}" \
-			  -dir migration
+			  password=${DB_PASSWORD}" up
 
 dev: build
 	./bin/mnotes
