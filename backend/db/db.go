@@ -9,7 +9,7 @@ import (
 
 //New create connection to database
 func New(ds string) (*gorm.DB, func()) {
-	db, err := gorm.Open("postgres", "ds")
+	db, err := gorm.Open("postgres", ds)
 	if err != nil {
 		panic(err)
 	}
