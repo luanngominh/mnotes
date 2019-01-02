@@ -7,7 +7,7 @@ CREATE TABLE "public"."notes"(
 	"title" text,
 	"body" text,
 	"tags" text[],
-	"expires" timestamptz,
+	"expire" timestamptz,
 	"created_at" timestamptz DEFAULT now(),
 	"deleted_at" timestamptz,
 	CONSTRAINT "notes_pkey" PRIMARY KEY("id"),
