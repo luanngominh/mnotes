@@ -43,12 +43,12 @@ func NewHTTPHandler(endpoints endpoints.Endpoints,
 	).ServeHTTP)
 
 	r.Route("/auth", func(r chi.Router) {
-		r.Post("/register", httptransport.NewServer{
-			endpoint.CreateUser,
+		r.Post("/register", httptransport.NewServer(
+			endpoints.CreateUser,
 			userDecode.RigsterRequestDecode,
 			encodeResponse,
 			options...,
-		})
+		).ServeHTTP)
 	})
 
 	return r

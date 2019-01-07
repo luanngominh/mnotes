@@ -20,7 +20,7 @@ type CreateUserRequest struct {
 // CreateUserResponse ...
 type CreateUserResponse struct {
 	Status string     `json:"status"`
-	User   model.User `json:"user"`
+	User   model.User `json:"user,omitempty"`
 }
 
 //MakeRegisterEndpoint ...
@@ -36,19 +36,19 @@ func MakeRegisterEndpoint(s service.Service) endpoint.Endpoint {
 
 		verifyToken := util.GenerateToken()
 
-		user := model.User{
+		user := &model.User{
 			Name:       req.Name,
 			Email:      req.Email,
 			HashedPass: hashed,
 			Verify:     verifyToken,
-			Status:     model.UserInactive,
+			Status:     model.UserActive,
 		}
 
-		user, err = s.UserSerivce.Create(ctx, &user)
+		_, err = s.UserSerivce.Create(ctx, user)
 		if err != nil {
 			return CreateUserResponse{Status: "error"}, err
 		}
 
-		return CreateUserResponse{Status: "success", User: user}, nil
+		return CreateUserResponse{Status: "success", User: *user}, nil
 	}
 }
