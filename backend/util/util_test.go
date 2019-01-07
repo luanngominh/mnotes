@@ -1,6 +1,8 @@
 package util
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestGenerateToken(t *testing.T) {
 	tests := []struct {

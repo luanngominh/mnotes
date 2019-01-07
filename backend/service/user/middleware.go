@@ -40,17 +40,18 @@ func (mw validationMiddleware) Create(ctx context.Context, u *model.User) (*mode
 	}
 
 	//Check email is unique
-	users, err := mw.Get(ctx, &userQuery{Email: u.Email})
-	if err != nil {
-		return nil, err
-	}
+	//comment for test email
+	// users, err := mw.Get(ctx, &userQuery{Email: u.Email})
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	if len(users) != 0 {
-		return nil, ErrEmailExist
-	}
+	// if len(users) != 0 {
+	// 	return nil, ErrEmailExist
+	// }
 
 	//Check name is unique
-	users, err = mw.Get(ctx, &userQuery{Name: u.Name})
+	users, err := mw.Get(ctx, &userQuery{Name: u.Name})
 	if err != nil {
 		return nil, err
 	}

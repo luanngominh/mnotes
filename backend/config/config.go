@@ -14,6 +14,8 @@ func init() {
 
 	Cfg.PrivateKeyFile = os.Getenv("PRIVATE_KEY_FILE")
 	Cfg.PublicKeyFile = os.Getenv("PUBLIC_KEY_FILE")
+
+	Cfg.SendgridAPI = os.Getenv("SENDGIRD_APIKEY")
 }
 
 //Config store program config
@@ -32,6 +34,9 @@ type Config struct {
 	//Use for jwt
 	PrivateKeyFile string
 	PublicKeyFile  string
+
+	//Sendgird API key
+	SendgridAPI string
 }
 
 var (

@@ -41,13 +41,15 @@ func MakeRegisterEndpoint(s service.Service) endpoint.Endpoint {
 			Email:      req.Email,
 			HashedPass: hashed,
 			Verify:     verifyToken,
-			Status:     model.UserActive,
+			Status:     model.UserInactive,
 		}
 
 		_, err = s.UserSerivce.Create(ctx, user)
 		if err != nil {
 			return CreateUserResponse{Status: "error"}, err
 		}
+
+		go util.SendEmail(user.Name, user.Email, user.Verify)
 
 		return CreateUserResponse{Status: "success", User: *user}, nil
 	}

@@ -59,7 +59,7 @@ func (errEmailExist) StatusCode() int {
 type errNameExist struct{}
 
 func (errNameExist) Error() string {
-	return "Email existed"
+	return "Name existed"
 }
 
 func (errNameExist) StatusCode() int {

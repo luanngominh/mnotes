@@ -2,8 +2,13 @@ package util
 
 import (
 	"crypto/rand"
+	"fmt"
 	"math/big"
 	"strconv"
+
+	"github.com/luanngominh/mnotes/backend/config"
+	sendgrid "github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 //GenerateToken generate 6 digits
@@ -14,4 +19,21 @@ func GenerateToken() string {
 		token = token + strconv.Itoa(int(n.Int64()))
 	}
 	return token
+}
+
+//SendEmail send email to user to verify email
+func SendEmail(name, email, verify string) error {
+	from := mail.NewEmail("mnotes", "mnotes@example.com")
+	subject := "Mnotes verify account"
+	to := mail.NewEmail(name, email)
+	plainTextContent := fmt.Sprintf(
+		"Hello %s!<br> We send your verify code: <strong>%s</strong>. Thank you for use our service.",
+		name, verify)
+	htmlContent := plainTextContent
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	fmt.Printf(config.Cfg.SendgridAPI)
+	client := sendgrid.NewSendClient(config.Cfg.SendgridAPI)
+	_, err := client.Send(message)
+
+	return err
 }
