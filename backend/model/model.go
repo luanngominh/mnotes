@@ -16,7 +16,7 @@ type Model struct {
 
 //BeforeCreate generate uuid and created at before create
 func (m *Model) BeforeCreate(scope *gorm.Scope) error {
-	id, _ := uuid.NewV4()
+	id := uuid.NewV4()
 	scope.SetColumn("ID", id)
 	scope.SetColumn("CreatedAt", time.Now())
 	return nil

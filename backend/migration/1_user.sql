@@ -6,6 +6,7 @@ CREATE TABLE "public"."users" (
 	"name" text NOT NULL,
 	"email" text NOT NULL,
 	"hashed_pass" text NOT NULL,
+	"verify" text,
 	"status" smallint DEFAULT 0,
 	"access_code" text,
 	"created_at" timestamptz DEFAULT now(),
