@@ -82,3 +82,24 @@ func MakeVerifyEndpoint(s service.Service) endpoint.Endpoint {
 		return VerifyUserResponse{Status: "success"}, nil
 	}
 }
+
+//LoginRequest ...
+type LoginRequest struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+//LoginResponse ...
+type LoginResponse struct {
+	Token string `json:"token"`
+}
+
+//MakeLoginEndpoint ...
+func MakeLoginEndpoint(s service.Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		// req := request.(LoginRequest)
+
+		return LoginResponse{Token: ""}, nil
+	}
+}

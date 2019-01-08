@@ -23,3 +23,11 @@ func VerifyRequestDecode(_ context.Context, r *http.Request) (interface{}, error
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return req, err
 }
+
+//LoginRequestDecode decode http request
+func LoginRequestDecode(_ context.Context, r *http.Request) (interface{}, error) {
+	var req user.LoginRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return req, err
+}
