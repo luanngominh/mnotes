@@ -23,5 +23,9 @@ local-env-down:
 test:
 	go test ./...
 
+gen-key:
+	openssl genrsa -out rsa_key 2048
+	openssl rsa -in rsa_key -pubout > rsa_key.pub
+
 deps-install:
 	go get github.com/matryer/moq

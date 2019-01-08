@@ -27,7 +27,7 @@ func (s *pgService) Update(ctx context.Context, u *model.User) (*model.User, err
 	return nil, nil
 }
 
-func (s *pgService) Get(ctx context.Context, query *userQuery) ([]*model.User, error) {
+func (s *pgService) Get(ctx context.Context, query *UserQuery) ([]*model.User, error) {
 	db := s.db
 
 	if query.Name != "" {
@@ -63,4 +63,27 @@ func (s *pgService) Active(ctx context.Context, userID, verifyCode string) (*mod
 		"status": model.UserActive,
 		"verify": "",
 	}).Error
+}
+
+func (s *pgService) GetOne(ctx context.Context, query *UserQuery) (*model.User, error) {
+	user := model.User{}
+	db := s.db
+
+	if query.ID != "" {
+		db = db.Where("id = ?", query.ID)
+	}
+
+	if query.Email != "" {
+		db = db.Where("email = ?", query.Email)
+	}
+
+	if query.Name != "" {
+		db = db.Where("name = ?", query.Name)
+	}
+
+	if err := db.First(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }

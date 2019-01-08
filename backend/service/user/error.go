@@ -13,6 +13,7 @@ var (
 	ErrUpdateStatus    = errUpdateStatus{}
 	ErrVerifyCodeEmpty = errVerifyCodeEmpty{}
 	ErrIDInvalid       = errIDInvalid{}
+	ErrPasswordEmpty   = errPasswordEmpty{}
 )
 
 //Define name empty error
@@ -111,5 +112,16 @@ func (errVerifyCodeEmpty) Error() string {
 }
 
 func (errVerifyCodeEmpty) StatusCode() int {
+	return http.StatusBadRequest
+}
+
+//Password empty
+type errPasswordEmpty struct{}
+
+func (errPasswordEmpty) Error() string {
+	return "Password empty"
+}
+
+func (errPasswordEmpty) StatusCode() int {
 	return http.StatusBadRequest
 }

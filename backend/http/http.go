@@ -56,6 +56,13 @@ func NewHTTPHandler(endpoints endpoints.Endpoints,
 			encodeResponse,
 			options...,
 		).ServeHTTP)
+
+		r.Post("/login", httptransport.NewServer(
+			endpoints.Login,
+			userDecode.LoginRequestDecode,
+			encodeResponse,
+			options...,
+		).ServeHTTP)
 	})
 
 	return r

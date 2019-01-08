@@ -34,13 +34,17 @@ func (mw validationMiddleware) Create(ctx context.Context, u *model.User) (*mode
 		return nil, ErrEmailEmpty
 	}
 
+	if u.HashedPass == "" {
+		return nil, ErrPasswordEmpty
+	}
+
 	emailRegex, _ := regexp.Compile(emailRegex)
 	if !emailRegex.MatchString(u.Email) {
 		return nil, ErrEmailFormat
 	}
 
 	//Check email is unique
-	users, err := mw.Get(ctx, &userQuery{Email: u.Email})
+	users, err := mw.Get(ctx, &UserQuery{Email: u.Email})
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +54,7 @@ func (mw validationMiddleware) Create(ctx context.Context, u *model.User) (*mode
 	}
 
 	//Check name is unique
-	users, err = mw.Get(ctx, &userQuery{Name: u.Name})
+	users, err = mw.Get(ctx, &UserQuery{Name: u.Name})
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +76,7 @@ func (mw validationMiddleware) Active(ctx context.Context, userID, verifyCode st
 	}
 
 	//Check userid existed
-	users, err := mw.Get(ctx, &userQuery{ID: userID})
+	users, err := mw.Get(ctx, &UserQuery{ID: userID})
 	if err != nil {
 		return nil, err
 	}

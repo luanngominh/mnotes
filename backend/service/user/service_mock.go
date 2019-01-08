@@ -5,8 +5,9 @@ package user
 
 import (
 	"context"
-	"github.com/luanngominh/mnotes/backend/model"
 	"sync"
+
+	"github.com/luanngominh/mnotes/backend/model"
 )
 
 var (
@@ -48,7 +49,7 @@ type ServiceMock struct {
 	CreateFunc func(ctx context.Context, u *model.User) (*model.User, error)
 
 	// GetFunc mocks the Get method.
-	GetFunc func(ctx context.Context, query *userQuery) ([]*model.User, error)
+	GetFunc func(ctx context.Context, query *UserQuery) ([]*model.User, error)
 
 	// UpdateFunc mocks the Update method.
 	UpdateFunc func(ctx context.Context, u *model.User) (*model.User, error)
@@ -76,7 +77,7 @@ type ServiceMock struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Query is the query argument value.
-			Query *userQuery
+			Query *UserQuery
 		}
 		// Update holds details about calls to the Update method.
 		Update []struct {
@@ -163,13 +164,13 @@ func (mock *ServiceMock) CreateCalls() []struct {
 }
 
 // Get calls GetFunc.
-func (mock *ServiceMock) Get(ctx context.Context, query *userQuery) ([]*model.User, error) {
+func (mock *ServiceMock) Get(ctx context.Context, query *UserQuery) ([]*model.User, error) {
 	if mock.GetFunc == nil {
 		panic("ServiceMock.GetFunc: method is nil but Service.Get was just called")
 	}
 	callInfo := struct {
 		Ctx   context.Context
-		Query *userQuery
+		Query *UserQuery
 	}{
 		Ctx:   ctx,
 		Query: query,
@@ -185,11 +186,11 @@ func (mock *ServiceMock) Get(ctx context.Context, query *userQuery) ([]*model.Us
 //     len(mockedService.GetCalls())
 func (mock *ServiceMock) GetCalls() []struct {
 	Ctx   context.Context
-	Query *userQuery
+	Query *UserQuery
 } {
 	var calls []struct {
 		Ctx   context.Context
-		Query *userQuery
+		Query *UserQuery
 	}
 	lockServiceMockGet.RLock()
 	calls = mock.calls.Get

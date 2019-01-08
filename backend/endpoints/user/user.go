@@ -7,6 +7,7 @@ import (
 
 	"github.com/luanngominh/mnotes/backend/model"
 	"github.com/luanngominh/mnotes/backend/service"
+	userSvc "github.com/luanngominh/mnotes/backend/service/user"
 	"github.com/luanngominh/mnotes/backend/util"
 )
 
@@ -85,8 +86,8 @@ func MakeVerifyEndpoint(s service.Service) endpoint.Endpoint {
 
 //LoginRequest ...
 type LoginRequest struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
+	Name     string `json:"name,omitempty"`
+	Email    string `json:"email,omitempty"`
 	Password string `json:"password"`
 }
 
@@ -98,8 +99,26 @@ type LoginResponse struct {
 //MakeLoginEndpoint ...
 func MakeLoginEndpoint(s service.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		// req := request.(LoginRequest)
+		req := request.(LoginRequest)
 
-		return LoginResponse{Token: ""}, nil
+		if req.Email == "" && req.Name == "" {
+			return nil, ErrUnauthorized
+		}
+
+		user, err := s.UserSerivce.GetOne(ctx, &userSvc.UserQuery{Name: req.Name, Email: req.Email})
+		if err != nil {
+			return nil, ErrUnauthorized
+		}
+
+		if err := util.VerifyPassword(req.Password, user.HashedPass); err != nil {
+			return nil, ErrUnauthorized
+		}
+
+		jwtToken, err := util.GenerateJWTToken(user.ID.String(), user.Name, user.Email)
+		if err != nil {
+			return nil, ErrUnauthorized
+		}
+
+		return LoginResponse{Token: jwtToken}, nil
 	}
 }

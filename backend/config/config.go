@@ -1,6 +1,12 @@
 package config
 
-import "os"
+import (
+	"crypto/rsa"
+	"io/ioutil"
+	"os"
+
+	jwt "github.com/dgrijalva/jwt-go"
+)
 
 func init() {
 	Cfg.DBHost = os.Getenv("DB_HOST")
@@ -12,8 +18,26 @@ func init() {
 	Cfg.Port = os.Getenv("PORT")
 	Cfg.Address = os.Getenv("ADDRESS")
 
-	Cfg.PrivateKeyFile = os.Getenv("PRIVATE_KEY_FILE")
-	Cfg.PublicKeyFile = os.Getenv("PUBLIC_KEY_FILE")
+	//Load rsa file to signed and verify
+	signBytes, err := ioutil.ReadFile(os.Getenv("PRIVATE_KEY_FILE"))
+	if err != nil {
+		panic(err)
+	}
+
+	Cfg.SignKey, err = jwt.ParseRSAPrivateKeyFromPEM(signBytes)
+	if err != nil {
+		panic(err)
+	}
+
+	verifyBytes, err := ioutil.ReadFile(os.Getenv("PUBLIC_KEY_FILE"))
+	if err != nil {
+		panic(err)
+	}
+
+	Cfg.VerifyKey, err = jwt.ParseRSAPublicKeyFromPEM(verifyBytes)
+	if err != nil {
+		panic(err)
+	}
 
 	Cfg.SendgridAPI = os.Getenv("SENDGIRD_APIKEY")
 }
@@ -32,8 +56,11 @@ type Config struct {
 	Address string
 
 	//Use for jwt
-	PrivateKeyFile string
-	PublicKeyFile  string
+	//SignKey is private key
+	//VerifyKey is public key
+	//We use RSA for signed
+	VerifyKey *rsa.PublicKey
+	SignKey   *rsa.PrivateKey
 
 	//Sendgird API key
 	SendgridAPI string
