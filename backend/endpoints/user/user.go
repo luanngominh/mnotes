@@ -49,8 +49,36 @@ func MakeRegisterEndpoint(s service.Service) endpoint.Endpoint {
 			return CreateUserResponse{Status: "error"}, err
 		}
 
-		go util.SendEmail(user.Name, user.Email, user.Verify)
+		go util.SendVerifyEmail(user.Name, user.Email, user.Verify)
 
 		return CreateUserResponse{Status: "success", User: *user}, nil
+	}
+}
+
+//VerifyUserRequest ...
+type VerifyUserRequest struct {
+	ID         string `json:"id"`
+	VerifyCode string `json:"verify_code"`
+}
+
+//VerifyUserResponse ...
+type VerifyUserResponse struct {
+	Status string `json:"status"`
+}
+
+//MakeVerifyEndpoint ...
+func MakeVerifyEndpoint(s service.Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(VerifyUserRequest)
+
+		user, err := s.UserSerivce.Active(ctx, req.ID, req.VerifyCode)
+
+		if err != nil {
+			return nil, err
+		}
+
+		go util.SendWelcomeEmail(user.Name, user.Email)
+
+		return VerifyUserResponse{Status: "success"}, nil
 	}
 }

@@ -9,11 +9,13 @@ import (
 //Endpoints ...
 type Endpoints struct {
 	CreateUser endpoint.Endpoint
+	VerifyUser endpoint.Endpoint
 }
 
 //MakeServerEndpoints create endpoint for service
 func MakeServerEndpoints(s service.Service) Endpoints {
 	return Endpoints{
 		CreateUser: user.MakeRegisterEndpoint(s),
+		VerifyUser: user.MakeVerifyEndpoint(s),
 	}
 }

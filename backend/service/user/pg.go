@@ -46,3 +46,21 @@ func (s *pgService) Get(ctx context.Context, query *userQuery) ([]*model.User, e
 
 	return user, db.Find(&user).Error
 }
+
+func (s *pgService) Active(ctx context.Context, userID, verifyCode string) (*model.User, error) {
+	user := model.User{}
+	err := s.db.Where("id = ?", userID).First(&user).Error
+
+	if err != nil {
+		return nil, ErrVerifyCode
+	}
+
+	if user.Verify != verifyCode {
+		return nil, ErrVerifyCode
+	}
+
+	return &user, s.db.Model(&user).Updates(map[string]interface{}{
+		"status": model.UserActive,
+		"verify": "",
+	}).Error
+}

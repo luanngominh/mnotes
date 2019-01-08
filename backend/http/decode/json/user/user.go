@@ -15,3 +15,11 @@ func RigsterRequestDecode(_ context.Context, r *http.Request) (interface{}, erro
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return req, err
 }
+
+//VerifyRequestDecode decode http request
+func VerifyRequestDecode(_ context.Context, r *http.Request) (interface{}, error) {
+	var req user.VerifyUserRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return req, err
+}

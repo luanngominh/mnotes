@@ -40,18 +40,17 @@ func (mw validationMiddleware) Create(ctx context.Context, u *model.User) (*mode
 	}
 
 	//Check email is unique
-	//comment for test email
-	// users, err := mw.Get(ctx, &userQuery{Email: u.Email})
-	// if err != nil {
-	// 	return nil, err
-	// }
+	users, err := mw.Get(ctx, &userQuery{Email: u.Email})
+	if err != nil {
+		return nil, err
+	}
 
-	// if len(users) != 0 {
-	// 	return nil, ErrEmailExist
-	// }
+	if len(users) != 0 {
+		return nil, ErrEmailExist
+	}
 
 	//Check name is unique
-	users, err := mw.Get(ctx, &userQuery{Name: u.Name})
+	users, err = mw.Get(ctx, &userQuery{Name: u.Name})
 	if err != nil {
 		return nil, err
 	}
@@ -61,4 +60,27 @@ func (mw validationMiddleware) Create(ctx context.Context, u *model.User) (*mode
 	}
 
 	return mw.Service.Create(ctx, u)
+}
+
+func (mw validationMiddleware) Active(ctx context.Context, userID, verifyCode string) (*model.User, error) {
+	if userID == "" {
+		return nil, ErrIDInvalid
+	}
+
+	if verifyCode == "" {
+		return nil, ErrVerifyCodeEmpty
+	}
+
+	//Check userid existed
+	users, err := mw.Get(ctx, &userQuery{ID: userID})
+	if err != nil {
+		return nil, err
+	}
+
+	//Check len users, if 0 so notthing in users -> user with userid not existed
+	if len(users) == 0 {
+		return nil, ErrIDInvalid
+	}
+
+	return mw.Service.Active(ctx, userID, verifyCode)
 }

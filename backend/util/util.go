@@ -21,8 +21,8 @@ func GenerateToken() string {
 	return token
 }
 
-//SendEmail send email to user to verify email
-func SendEmail(name, email, verify string) error {
+//SendVerifyEmail send email to user to verify email
+func SendVerifyEmail(name, email, verify string) error {
 	from := mail.NewEmail("mnotes", "verify@mnotes.live")
 	subject := "Mnotes verify account"
 	to := mail.NewEmail(name, email)
@@ -31,7 +31,21 @@ func SendEmail(name, email, verify string) error {
 		name, verify)
 	htmlContent := plainTextContent
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-	fmt.Printf(config.Cfg.SendgridAPI)
+	client := sendgrid.NewSendClient(config.Cfg.SendgridAPI)
+	_, err := client.Send(message)
+
+	return err
+}
+
+//SendWelcomeEmail send email to user to verify email
+func SendWelcomeEmail(name, email string) error {
+	from := mail.NewEmail("mnotes", "welcome@mnotes.live")
+	subject := "Welcome to mnotes"
+	to := mail.NewEmail(name, email)
+	plainTextContent := fmt.Sprintf(
+		"Hello %s!<br> Welcome to mnotes", name)
+	htmlContent := plainTextContent
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 	client := sendgrid.NewSendClient(config.Cfg.SendgridAPI)
 	_, err := client.Send(message)
 

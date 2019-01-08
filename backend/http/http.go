@@ -49,6 +49,13 @@ func NewHTTPHandler(endpoints endpoints.Endpoints,
 			encodeResponse,
 			options...,
 		).ServeHTTP)
+
+		r.Put("/verify", httptransport.NewServer(
+			endpoints.VerifyUser,
+			userDecode.VerifyRequestDecode,
+			encodeResponse,
+			options...,
+		).ServeHTTP)
 	})
 
 	return r

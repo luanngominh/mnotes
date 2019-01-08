@@ -4,11 +4,15 @@ import "net/http"
 
 //Error declaration
 var (
-	ErrNameEmpty   = errNameEmpty{}
-	ErrEmailEmpty  = errEmailEmpty{}
-	ErrEmailFormat = errEmailFormat{}
-	ErrEmailExist  = errEmailExist{}
-	ErrNameExist   = errNameExist{}
+	ErrNameEmpty       = errNameEmpty{}
+	ErrEmailEmpty      = errEmailEmpty{}
+	ErrEmailFormat     = errEmailFormat{}
+	ErrEmailExist      = errEmailExist{}
+	ErrNameExist       = errNameExist{}
+	ErrVerifyCode      = errVerifyCode{}
+	ErrUpdateStatus    = errUpdateStatus{}
+	ErrVerifyCodeEmpty = errVerifyCodeEmpty{}
+	ErrIDInvalid       = errIDInvalid{}
 )
 
 //Define name empty error
@@ -63,5 +67,49 @@ func (errNameExist) Error() string {
 }
 
 func (errNameExist) StatusCode() int {
+	return http.StatusBadRequest
+}
+
+//Verify code error
+type errVerifyCode struct{}
+
+func (errVerifyCode) Error() string {
+	return "Verify code error"
+}
+
+func (errVerifyCode) StatusCode() int {
+	return http.StatusBadRequest
+}
+
+//Update status error
+type errUpdateStatus struct{}
+
+func (errUpdateStatus) Error() string {
+	return "Update status error"
+}
+
+func (errUpdateStatus) StatusCode() int {
+	return http.StatusBadRequest
+}
+
+//ID empty
+type errIDInvalid struct{}
+
+func (errIDInvalid) Error() string {
+	return "User ID invalid"
+}
+
+func (errIDInvalid) StatusCode() int {
+	return http.StatusBadRequest
+}
+
+//Verify code empty
+type errVerifyCodeEmpty struct{}
+
+func (errVerifyCodeEmpty) Error() string {
+	return "Verify code empty"
+}
+
+func (errVerifyCodeEmpty) StatusCode() int {
 	return http.StatusBadRequest
 }
