@@ -22,3 +22,6 @@ local-env-down:
 
 test:
 	go test ./...
+
+deps-install:
+	go get github.com/matryer/moq
