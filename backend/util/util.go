@@ -23,7 +23,7 @@ func GenerateToken() string {
 
 //SendEmail send email to user to verify email
 func SendEmail(name, email, verify string) error {
-	from := mail.NewEmail("mnotes", "mnotes@example.com")
+	from := mail.NewEmail("mnotes", "verify@mnotes.live")
 	subject := "Mnotes verify account"
 	to := mail.NewEmail(name, email)
 	plainTextContent := fmt.Sprintf(
