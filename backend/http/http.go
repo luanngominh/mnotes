@@ -10,6 +10,7 @@ import (
 	httptransport "github.com/go-kit/kit/transport/http"
 
 	"github.com/luanngominh/mnotes/backend/endpoints"
+	noteDecode "github.com/luanngominh/mnotes/backend/http/decode/json/note"
 	userDecode "github.com/luanngominh/mnotes/backend/http/decode/json/user"
 )
 
@@ -60,6 +61,16 @@ func NewHTTPHandler(endpoints endpoints.Endpoints,
 		r.Post("/login", httptransport.NewServer(
 			endpoints.Login,
 			userDecode.LoginRequestDecode,
+			encodeResponse,
+			options...,
+		).ServeHTTP)
+	})
+
+	r.Route("/note", func(r chi.Router) {
+
+		r.Post("/", httptransport.NewServer(
+			endpoints.CreateNote,
+			noteDecode.CreateNoteDecode,
 			encodeResponse,
 			options...,
 		).ServeHTTP)

@@ -1,6 +1,8 @@
 package util
 
 import (
+	"errors"
+	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -49,4 +51,29 @@ func GenerateJWTToken(id, name, email string) (string, error) {
 	}
 
 	return tokenString, nil
+}
+
+//VerifyToken check token format, after check signature valid in token
+func VerifyToken(token string) error {
+	errInvalidFormat := errors.New("Token invalid format")
+
+	tokenParser := strings.Split(token, " ")
+	if len(tokenParser) != 2 {
+		return errInvalidFormat
+	}
+
+	if strings.ToUpper(tokenParser[0]) != "BEARER" {
+		return errInvalidFormat
+	}
+
+	tokenString := tokenParser[1]
+
+	//https://gist.github.com/troyk/3dcf2c39b38a4c21a0e63d8c8aa34123
+	//Verify sign
+	token, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method(*jwt.SigningMethodRS256); !ok {
+
+		}
+	})
+	return nil
 }
