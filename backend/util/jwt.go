@@ -54,10 +54,10 @@ func GenerateJWTToken(id, name, email string) (string, error) {
 }
 
 //VerifyToken check token format, after check signature valid in token
-func VerifyToken(token string) error {
+func VerifyToken(bearerToken string) error {
 	errInvalidFormat := errors.New("Token invalid format")
 
-	tokenParser := strings.Split(token, " ")
+	tokenParser := strings.Split(bearerToken, " ")
 	if len(tokenParser) != 2 {
 		return errInvalidFormat
 	}
@@ -66,14 +66,23 @@ func VerifyToken(token string) error {
 		return errInvalidFormat
 	}
 
-	tokenString := tokenParser[1]
+	bearerToken = tokenParser[1]
 
-	//https://gist.github.com/troyk/3dcf2c39b38a4c21a0e63d8c8aa34123
-	//Verify sign
-	token, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method(*jwt.SigningMethodRS256); !ok {
-
+	token, err := jwt.Parse(bearerToken, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+			return nil, ErrUnauthorize
 		}
+
+		return config.Cfg.VerifyKey, nil
 	})
-	return nil
+
+	if err != nil {
+		return ErrUnauthorize
+	}
+
+	if token.Valid {
+		return nil
+	}
+
+	return ErrUnauthorize
 }
