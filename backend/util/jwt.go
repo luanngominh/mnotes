@@ -1,11 +1,11 @@
 package util
 
 import (
-	"errors"
 	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
+
 	"github.com/luanngominh/mnotes/backend/config"
 )
 
@@ -54,16 +54,18 @@ func GenerateJWTToken(id, name, email string) (string, error) {
 }
 
 //VerifyToken check token format, after check signature valid in token
-func VerifyToken(bearerToken string) error {
-	errInvalidFormat := errors.New("Token invalid format")
+func VerifyToken(bearerToken string) (*jwt.Claims, error) {
+	if bearerToken == "" {
+		return nil, ErrMissingAuthToken
+	}
 
 	tokenParser := strings.Split(bearerToken, " ")
 	if len(tokenParser) != 2 {
-		return errInvalidFormat
+		return nil, ErrInvalidFormat
 	}
 
 	if strings.ToUpper(tokenParser[0]) != "BEARER" {
-		return errInvalidFormat
+		return nil, ErrInvalidFormat
 	}
 
 	bearerToken = tokenParser[1]
@@ -77,12 +79,14 @@ func VerifyToken(bearerToken string) error {
 	})
 
 	if err != nil {
-		return ErrUnauthorize
+		return nil, ErrUnauthorize
 	}
 
 	if token.Valid {
-		return nil
+		userAuth := token.Claims
+
+		return &userAuth, nil
 	}
 
-	return ErrUnauthorize
+	return nil, ErrUnauthorize
 }

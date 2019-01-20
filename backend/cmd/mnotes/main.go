@@ -16,6 +16,7 @@ import (
 	"github.com/luanngominh/mnotes/backend/endpoints"
 	mnotesHttp "github.com/luanngominh/mnotes/backend/http"
 	"github.com/luanngominh/mnotes/backend/service"
+	noteSvc "github.com/luanngominh/mnotes/backend/service/note"
 	userSvc "github.com/luanngominh/mnotes/backend/service/user"
 )
 
@@ -45,6 +46,10 @@ func main() {
 			userSvc.NewPGService(pgDB),
 			userSvc.ValidationMiddleware(),
 		).(userSvc.Service),
+		NoteService: service.Compose(
+			noteSvc.NewPGService(pgDB),
+			noteSvc.ValidationMiddleware(),
+		).(noteSvc.Service),
 	}
 
 	defer pgClose()

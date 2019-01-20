@@ -15,12 +15,17 @@ type unauthorize struct {
 func NoteMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		token := req.Header.Get("Authorization")
-		if err := util.VerifyToken(token); err != nil {
+
+		_, err := util.VerifyToken(token)
+
+		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			js, _ := json.Marshal(unauthorize{Err: err.Error()})
 			w.Write(js)
 			return
 		}
+		// context.WithValue(context.Background(), authInfo, "auth_info")
+
 		next.ServeHTTP(w, req)
 	})
 }

@@ -3,11 +3,11 @@
 
 CREATE TABLE "public"."notes"(
 	"id" uuid NOT NULL,
-	"user_id" uuid,
+	"user_id" uuid NOT NULL,
 	"title" text,
 	"body" text,
-	"tags" text[],
-	"expire" timestamptz,
+	--"tags" text[],
+	"expire" timestamptz DEFAULT NULL,
 	"created_at" timestamptz DEFAULT now(),
 	"deleted_at" timestamptz,
 	CONSTRAINT "notes_pkey" PRIMARY KEY("id"),
