@@ -25,7 +25,7 @@ type JWTPayload struct {
 //AuthPayload user info which is stored in Jwt token
 type AuthPayload struct {
 	ID    string `json:"id"`
-	Name  string `json:"namme"`
+	Name  string `json:"name"`
 	Email string `json:"email"`
 }
 
@@ -84,7 +84,6 @@ func VerifyToken(bearerToken string) (*jwt.Claims, error) {
 
 	if token.Valid {
 		userAuth := token.Claims
-
 		return &userAuth, nil
 	}
 

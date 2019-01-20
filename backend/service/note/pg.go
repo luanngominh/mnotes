@@ -18,14 +18,14 @@ func NewPGService(db *gorm.DB) Service {
 	}
 }
 
-func (s *pgService) Create(_ context.Context, n *model.Note) (*model.Note, error) {
+func (s *pgService) Create(ctx context.Context, n *model.Note) (*model.Note, error) {
 	return n, s.db.Create(n).Error
 }
 
-func (s *pgService) Delete(_ context.Context, n *model.Note) (*model.Note, error) {
+func (s *pgService) Delete(ctx context.Context, n *model.Note) (*model.Note, error) {
 	return nil, nil
 }
 
-func (s *pgService) Get(_ context.Context, query *NoteQuery) ([]*model.Note, error) {
+func (s *pgService) Get(ctx context.Context, query *NoteQuery) ([]*model.Note, error) {
 	return nil, nil
 }

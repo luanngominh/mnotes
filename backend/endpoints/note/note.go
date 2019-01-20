@@ -3,17 +3,18 @@ package note
 import (
 	"context"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-kit/kit/endpoint"
+	uuid "github.com/satori/go.uuid"
+
 	"github.com/luanngominh/mnotes/backend/model"
 	"github.com/luanngominh/mnotes/backend/service"
-	uuid "github.com/satori/go.uuid"
 )
 
 //CreateNoteRequest ...
 type CreateNoteRequest struct {
-	UserID uuid.UUID `json:"user_id"`
-	Title  string    `json:"title"`
-	Body   string    `json:"body"`
+	Title string `json:"title"`
+	Body  string `json:"body"`
 }
 
 //Response ...
@@ -25,9 +26,19 @@ type Response struct {
 func MakeCreateEndpoint(s service.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(CreateNoteRequest)
+
+		//Get authinfo from context, parent by note middleware
+		authInfo := (*ctx.Value("auth_info").(*jwt.Claims)).(jwt.MapClaims)
+
+		userID, err := uuid.FromString(authInfo["id"].(string))
+		if err != nil {
+			return nil, ErrUserIDInvalid
+		}
+
 		n := &model.Note{
-			Title: req.Title,
-			Body:  req.Body,
+			UserID: userID,
+			Title:  req.Title,
+			Body:   req.Body,
 		}
 
 		note, err := s.NoteService.Create(ctx, n)

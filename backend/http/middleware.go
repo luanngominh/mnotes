@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -16,7 +17,7 @@ func NoteMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		token := req.Header.Get("Authorization")
 
-		_, err := util.VerifyToken(token)
+		authInfo, err := util.VerifyToken(token)
 
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
@@ -24,8 +25,10 @@ func NoteMiddleware(next http.Handler) http.Handler {
 			w.Write(js)
 			return
 		}
-		// context.WithValue(context.Background(), authInfo, "auth_info")
 
-		next.ServeHTTP(w, req)
+		ctx := req.Context()
+		ctx = context.WithValue(ctx, "auth_info", authInfo)
+
+		next.ServeHTTP(w, req.WithContext(ctx))
 	})
 }

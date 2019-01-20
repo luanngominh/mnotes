@@ -4,14 +4,13 @@
 CREATE TABLE "public"."notes"(
 	"id" uuid NOT NULL,
 	"user_id" uuid NOT NULL,
-	"title" text,
-	"body" text,
-	--"tags" text[],
+	"title" text NOT NULL,
+	"body" text NOT NULL,
 	"expire" timestamptz DEFAULT NULL,
 	"created_at" timestamptz DEFAULT now(),
 	"deleted_at" timestamptz,
 	CONSTRAINT "notes_pkey" PRIMARY KEY("id"),
-	CONSTRAINT "notes_users" FOREIGN kEY ("id") REFERENCES users("id")
+	CONSTRAINT "notes_users" FOREIGN kEY ("user_id") REFERENCES users("id")
 ) WITH (oids = false);
 
 

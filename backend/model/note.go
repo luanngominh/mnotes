@@ -11,9 +11,8 @@ type Note struct {
 	//Line below which is called embed struct
 	Model
 
-	User  uuid.UUID `json:"user_id"`
-	Title string    `json:"title"`
-	Body  string    `json:"body"`
-	// Tags   []string   `json:"tags,omitempty"`
+	UserID uuid.UUID  `json:"user_id"`
+	Title  string     `json:"title"`
+	Body   string     `json:"body"`
 	Expire *time.Time `json:"expire,omitempty"`
 }
