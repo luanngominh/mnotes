@@ -27,5 +27,23 @@ func (s *pgService) Delete(ctx context.Context, n *model.Note) (*model.Note, err
 }
 
 func (s *pgService) Get(ctx context.Context, query *NoteQuery) ([]*model.Note, error) {
-	return nil, nil
+	db := s.db
+
+	if query.ID != "" {
+		db.Where("id = ?", query.ID)
+	}
+
+	if query.UserID != "" {
+		db.Where("user_id = ?", query.UserID)
+	}
+
+	if query.Con == 0 && query.Limit == 0 {
+		notes := []*model.Note{}
+		return notes, db.Order("created_at desc").Offset(query.Con).Limit(query.Limit).
+			Select("title, body, id, user_id, created_at").Find(&notes).Error
+	}
+
+	notes := []*model.Note{}
+	return notes, db.Order("created_at desc").Offset(query.Con).Limit(query.Limit).
+		Select("title, body, id, user_id, created_at").Find(&notes).Error
 }

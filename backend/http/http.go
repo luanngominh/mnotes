@@ -68,9 +68,17 @@ func NewHTTPHandler(endpoints endpoints.Endpoints,
 
 	r.Route("/note", func(r chi.Router) {
 		r.Use(NoteMiddleware)
+
 		r.Post("/", httptransport.NewServer(
 			endpoints.CreateNote,
 			noteDecode.CreateNoteDecode,
+			encodeResponse,
+			options...,
+		).ServeHTTP)
+
+		r.Get("/{get_query}", httptransport.NewServer(
+			endpoints.GetNote,
+			noteDecode.GetNoteDecode,
 			encodeResponse,
 			options...,
 		).ServeHTTP)

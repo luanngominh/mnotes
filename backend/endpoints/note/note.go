@@ -9,6 +9,7 @@ import (
 
 	"github.com/luanngominh/mnotes/backend/model"
 	"github.com/luanngominh/mnotes/backend/service"
+	"github.com/luanngominh/mnotes/backend/service/note"
 )
 
 //CreateNoteRequest ...
@@ -47,5 +48,38 @@ func MakeCreateEndpoint(s service.Service) endpoint.Endpoint {
 		}
 
 		return Response{Note: *note}, nil
+	}
+}
+
+//GetNoteRequest ...
+type GetNoteRequest struct {
+	Continue int `json:"con"`
+	Limit    int `json:"limit"`
+}
+
+//GetNoteResponse ...
+type GetNoteResponse struct {
+	Notes []*model.Note `json:"notes"`
+}
+
+//MakeGetNoteEndpoints ...
+func MakeGetNoteEndpoints(s service.Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(GetNoteRequest)
+
+		//Get authinfo from context, parent by note middleware
+		authInfo := (*ctx.Value("auth_info").(*jwt.Claims)).(jwt.MapClaims)
+
+		notes, err := s.NoteService.Get(ctx, &note.NoteQuery{
+			UserID: authInfo["id"].(string),
+			Con:    req.Continue,
+			Limit:  req.Limit,
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		return GetNoteResponse{notes}, nil
 	}
 }

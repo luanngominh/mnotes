@@ -17,4 +17,6 @@ type Service interface {
 type NoteQuery struct {
 	ID     string
 	UserID string
+	Con    int
+	Limit  int
 }
