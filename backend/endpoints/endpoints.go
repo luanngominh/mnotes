@@ -18,6 +18,7 @@ type Endpoints struct {
 	//Note endpoint
 	CreateNote endpoint.Endpoint
 	GetNote    endpoint.Endpoint
+	GetAllNote endpoint.Endpoint
 }
 
 //MakeServerEndpoints create endpoint for service
@@ -29,5 +30,6 @@ func MakeServerEndpoints(s service.Service) Endpoints {
 
 		CreateNote: note.MakeCreateEndpoint(s),
 		GetNote:    note.MakeGetNoteEndpoints(s),
+		GetAllNote: note.MakeGetAllNoteEndpoints(s),
 	}
 }

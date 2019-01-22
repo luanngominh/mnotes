@@ -83,3 +83,20 @@ func MakeGetNoteEndpoints(s service.Service) endpoint.Endpoint {
 		return GetNoteResponse{notes}, nil
 	}
 }
+
+//GetAllNoteResponse ...
+type GetAllNoteResponse struct {
+	Notes []*model.Note `json:"notes"`
+}
+
+//MakeGetAllNoteEndpoints ...
+func MakeGetAllNoteEndpoints(s service.Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		//Get authinfo from context, parent by note middleware
+		authInfo := (*ctx.Value("auth_info").(*jwt.Claims)).(jwt.MapClaims)
+
+		notes, err := s.NoteService.GetAll(ctx, authInfo["id"])
+
+		return nil, nil
+	}
+}

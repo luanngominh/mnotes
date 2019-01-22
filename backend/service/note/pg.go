@@ -47,3 +47,8 @@ func (s *pgService) Get(ctx context.Context, query *NoteQuery) ([]*model.Note, e
 	return notes, db.Order("created_at desc").Offset(query.Con).Limit(query.Limit).
 		Select("title, body, id, user_id, created_at").Find(&notes).Error
 }
+
+func (s *pgService) GetAll(ctx context.Context, userID string) ([]*model.Note, error) {
+	notes := []*model.Note{}
+	return notes, s.db.Where("id = ?", userID).Order("created_at desc").Find(&notes).Error
+}
