@@ -51,3 +51,18 @@ func SendWelcomeEmail(name, email string) error {
 
 	return err
 }
+
+//SendRecoverEmail send recover password
+func SendRecoverEmail(accessCode, name, email string) error {
+	from := mail.NewEmail("mnotes", "recover@mnotes.live")
+	subject := "Recover mnotes password"
+	to := mail.NewEmail(name, email)
+	plainTextContent := fmt.Sprintf(
+		"Hello %s!<br> We send to you access code %s <br>Best regard,", name, accessCode)
+	htmlContent := plainTextContent
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	client := sendgrid.NewSendClient(config.Cfg.SendgridAPI)
+	_, err := client.Send(message)
+
+	return err
+}
