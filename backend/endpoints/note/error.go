@@ -6,6 +6,7 @@ import "net/http"
 var (
 	ErrUserIDInvalid   = errUserIDInvalid{}
 	ErrContinueInvalid = errContinueInvalid{}
+	ErrGetAllNote      = errGetAllNote{}
 )
 
 type errUserIDInvalid struct{}
@@ -25,5 +26,15 @@ func (errContinueInvalid) Error() string {
 }
 
 func (errContinueInvalid) StatusCode() int {
+	return http.StatusBadRequest
+}
+
+type errGetAllNote struct{}
+
+func (errGetAllNote) Error() string {
+	return "Get all note error"
+}
+
+func (errGetAllNote) StatusCode() int {
 	return http.StatusBadRequest
 }

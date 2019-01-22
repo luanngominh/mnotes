@@ -95,8 +95,11 @@ func MakeGetAllNoteEndpoints(s service.Service) endpoint.Endpoint {
 		//Get authinfo from context, parent by note middleware
 		authInfo := (*ctx.Value("auth_info").(*jwt.Claims)).(jwt.MapClaims)
 
-		notes, err := s.NoteService.GetAll(ctx, authInfo["id"])
+		notes, err := s.NoteService.GetAll(ctx, authInfo["id"].(string))
+		if err != nil {
+			return nil, ErrGetAllNote
+		}
 
-		return nil, nil
+		return GetAllNoteResponse{notes}, nil
 	}
 }

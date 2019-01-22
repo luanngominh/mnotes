@@ -76,10 +76,10 @@ func NewHTTPHandler(endpoints endpoints.Endpoints,
 			options...,
 		).ServeHTTP)
 
-		r.Get("/{user_id}", httptransport.NewServer(
+		r.Get("/", httptransport.NewServer(
 			endpoints.GetAllNote,
 			httptransport.NopRequestDecoder,
-			encodeJSONError,
+			encodeResponse,
 			options...,
 		).ServeHTTP)
 

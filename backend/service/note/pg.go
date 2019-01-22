@@ -39,16 +39,16 @@ func (s *pgService) Get(ctx context.Context, query *NoteQuery) ([]*model.Note, e
 
 	if query.Con == 0 && query.Limit == 0 {
 		notes := []*model.Note{}
-		return notes, db.Order("created_at desc").Offset(query.Con).Limit(query.Limit).
+		return notes, db.Where("user_id = ?", query.UserID).Order("created_at desc").Offset(query.Con).Limit(query.Limit).
 			Select("title, body, id, user_id, created_at").Find(&notes).Error
 	}
 
 	notes := []*model.Note{}
-	return notes, db.Order("created_at desc").Offset(query.Con).Limit(query.Limit).
+	return notes, db.Where("user_id = ?", query.UserID).Order("created_at desc").Offset(query.Con).Limit(query.Limit).
 		Select("title, body, id, user_id, created_at").Find(&notes).Error
 }
 
 func (s *pgService) GetAll(ctx context.Context, userID string) ([]*model.Note, error) {
 	notes := []*model.Note{}
-	return notes, s.db.Where("id = ?", userID).Order("created_at desc").Find(&notes).Error
+	return notes, s.db.Where("user_id = ?", userID).Order("created_at desc").Find(&notes).Error
 }
