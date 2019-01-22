@@ -12,6 +12,8 @@ type unauthorize struct {
 	Err string `json:"error"`
 }
 
+// type AuthKey *jwt.
+
 //NoteMiddleware check user login
 func NoteMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
