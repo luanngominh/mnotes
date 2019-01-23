@@ -22,8 +22,10 @@ func (s *pgService) Create(ctx context.Context, n *model.Note) (*model.Note, err
 	return n, s.db.Create(n).Error
 }
 
-func (s *pgService) Delete(ctx context.Context, n *model.Note) (*model.Note, error) {
-	return nil, nil
+func (s *pgService) Delete(ctx context.Context, noteID string) error {
+	note := model.Note{}
+	s.db.Where("id = ?", noteID).Delete(note)
+	return nil
 }
 
 func (s *pgService) Get(ctx context.Context, query *NoteQuery) ([]*model.Note, error) {

@@ -48,3 +48,10 @@ func GetNoteDecode(_ context.Context, r *http.Request) (interface{}, error) {
 
 	return note.GetNoteRequest{Continue: con, Limit: limit}, err
 }
+
+//DeleteNoteDecode decode http request
+func DeleteNoteDecode(_ context.Context, r *http.Request) (interface{}, error) {
+	var req note.DeleteNoteRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return req, err
+}

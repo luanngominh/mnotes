@@ -30,3 +30,15 @@ func (mw validationMiddleware) Create(ctx context.Context, n *model.Note) (*mode
 
 	return mw.Service.Create(ctx, n)
 }
+
+func (mw validationMiddleware) Delete(ctx context.Context, noteID string) error {
+	// if noteID == "" {
+	// 	return ErrNoteIDEmpty
+	// }
+
+	// if !model.IsUUID(noteID) {
+	// 	return ErrNoteIDInvalid
+	// }
+
+	return mw.Service.Delete(ctx, noteID)
+}

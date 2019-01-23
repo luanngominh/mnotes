@@ -103,3 +103,28 @@ func MakeGetAllNoteEndpoints(s service.Service) endpoint.Endpoint {
 		return GetAllNoteResponse{notes}, nil
 	}
 }
+
+//DeleteNoteRequest ...
+type DeleteNoteRequest struct {
+	ID string `json:"note_id"`
+}
+
+//DeleteNoteResponse ...
+type DeleteNoteResponse struct {
+	Status string `json:"status"`
+}
+
+//MakeDeleteNoteEndpoints ...
+func MakeDeleteNoteEndpoints(s service.Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(DeleteNoteRequest)
+
+		// pp.Println(req)
+		err := s.NoteService.Delete(ctx, req.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		return DeleteNoteResponse{Status: "success"}, nil
+	}
+}

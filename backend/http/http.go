@@ -83,6 +83,13 @@ func NewHTTPHandler(endpoints endpoints.Endpoints,
 			options...,
 		).ServeHTTP)
 
+		r.Delete("/", httptransport.NewServer(
+			endpoints.DeleteNote,
+			noteDecode.DeleteNoteDecode,
+			encodeResponse,
+			options...,
+		).ServeHTTP)
+
 		//get_query: con=0&limit=2 encode by base64
 		r.Get("/{get_query}", httptransport.NewServer(
 			endpoints.GetNote,

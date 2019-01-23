@@ -7,6 +7,8 @@ var (
 	ErrBodyEmpty     = errBodyEmpty{}
 	ErrTitleEmpty    = errBodyEmpty{}
 	ErrUserIDInvalid = errUserIDInvalid{}
+	ErrNoteIDEmpty   = errNoteIDEmpty{}
+	ErrNoteIDInvalid = errNoteIDInvalid{}
 )
 
 type errTitleEmpty struct{}
@@ -36,5 +38,25 @@ func (errUserIDInvalid) Error() string {
 }
 
 func (errUserIDInvalid) StatusCode() int {
+	return http.StatusBadRequest
+}
+
+type errNoteIDEmpty struct{}
+
+func (errNoteIDEmpty) Error() string {
+	return "Error note ID empty"
+}
+
+func (errNoteIDEmpty) StatusCode() int {
+	return http.StatusBadRequest
+}
+
+type errNoteIDInvalid struct{}
+
+func (errNoteIDInvalid) Error() string {
+	return "Err ID invalid"
+}
+
+func (errNoteIDInvalid) StatusCode() int {
 	return http.StatusBadRequest
 }
