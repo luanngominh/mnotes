@@ -36,7 +36,7 @@ func NewHTTPHandler(endpoints endpoints.Endpoints,
 		httptransport.ServerErrorEncoder(encodeError),
 	}
 
-	r.Get("/_warm", httptransport.NewServer(
+	r.Get("/health_check", httptransport.NewServer(
 		endpoint.Nop,
 		httptransport.NopRequestDecoder,
 		httptransport.EncodeJSONResponse,
