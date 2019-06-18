@@ -115,7 +115,7 @@ func createCallback(scope *Scope) {
 		}
 
 		// execute create sql
-		if lastInsertIDReturningSuffix ==  || primaryField == nil {
+		if lastInsertIDReturningSuffix == "" || primaryField == nil {
 			if result, err := scope.SQLDB().Exec(scope.SQL, scope.SQLVars...); scope.Err(err) == nil {
 				// set rows affected count
 				scope.db.RowsAffected, _ = result.RowsAffected()

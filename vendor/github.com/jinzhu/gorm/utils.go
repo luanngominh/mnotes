@@ -88,7 +88,7 @@ func toQueryMarks(primaryValues [][]interface{}) string {
 		if len(marks) > 1 {
 			results = append(results, fmt.Sprintf("(%v)", strings.Join(marks, ",")))
 		} else {
-			results = append(results, strings.Join(marks, ))
+			results = append(results, strings.Join(marks, ""))
 		}
 	}
 	return strings.Join(results, ",")
@@ -122,7 +122,7 @@ func fileWithLineNum() string {
 			return fmt.Sprintf("%v:%v", file, line)
 		}
 	}
-	return 
+	return ""
 }
 
 func isBlank(value reflect.Value) bool {
@@ -177,7 +177,7 @@ func toString(str interface{}) string {
 	} else if reflectValue := reflect.Indirect(reflect.ValueOf(str)); reflectValue.IsValid() {
 		return fmt.Sprintf("%v", reflectValue.Interface())
 	}
-	return 
+	return ""
 }
 
 func makeSlice(elemType reflect.Type) interface{} {
@@ -219,8 +219,8 @@ func getValueFromFields(value reflect.Value, fieldNames []string) (results []int
 }
 
 func addExtraSpaceIfExist(str string) string {
-	if str !=  {
+	if str != "" {
 		return " " + str
 	}
-	return 
+	return ""
 }

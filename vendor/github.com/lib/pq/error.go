@@ -441,7 +441,7 @@ func (err *Error) Get(k byte) (v string) {
 	case 'R':
 		return err.Routine
 	}
-	return 
+	return ""
 }
 
 func (err Error) Error() string {

@@ -81,12 +81,12 @@ func (m *SigningMethodRSA) Sign(signingString string, key interface{}) (string, 
 
 	// Validate type of key
 	if rsaKey, ok = key.(*rsa.PrivateKey); !ok {
-		return , ErrInvalidKey
+		return "", ErrInvalidKey
 	}
 
 	// Create the hasher
 	if !m.Hash.Available() {
-		return , ErrHashUnavailable
+		return "", ErrHashUnavailable
 	}
 
 	hasher := m.Hash.New()
@@ -96,6 +96,6 @@ func (m *SigningMethodRSA) Sign(signingString string, key interface{}) (string, 
 	if sigBytes, err := rsa.SignPKCS1v15(rand.Reader, rsaKey, m.Hash, hasher.Sum(nil)); err == nil {
 		return EncodeSegment(sigBytes), nil
 	} else {
-		return , err
+		return "", err
 	}
 }

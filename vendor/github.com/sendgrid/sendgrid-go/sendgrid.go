@@ -15,7 +15,7 @@ type Client struct {
 
 // GetRequest returns a default request object.
 func GetRequest(key string, endpoint string, host string) rest.Request {
-	if host ==  {
+	if host == "" {
 		host = "https://api.sendgrid.com"
 	}
 	baseURL := host + endpoint
@@ -36,7 +36,7 @@ func (cl *Client) Send(email *mail.SGMailV3) (*rest.Response, error) {
 }
 
 func NewSendClient(key string) *Client {
-	request := GetRequest(key, "/v3/mail/send", )
+	request := GetRequest(key, "/v3/mail/send", "")
 	request.Method = "POST"
 	return &Client{request}
 }

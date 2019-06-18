@@ -48,7 +48,7 @@ func (s *commonDialect) fieldCanAutoIncrement(field *StructField) bool {
 func (s *commonDialect) DataTypeOf(field *StructField) string {
 	var dataValue, sqlType, size, additionalType = ParseFieldStructForDialect(field, s)
 
-	if sqlType ==  {
+	if sqlType == "" {
 		switch dataValue.Kind() {
 		case reflect.Bool:
 			sqlType = "BOOLEAN"
@@ -87,11 +87,11 @@ func (s *commonDialect) DataTypeOf(field *StructField) string {
 		}
 	}
 
-	if sqlType ==  {
+	if sqlType == "" {
 		panic(fmt.Sprintf("invalid sql type %s (%s) for commonDialect", dataValue.Type().Name(), dataValue.Kind().String()))
 	}
 
-	if strings.TrimSpace(additionalType) ==  {
+	if strings.TrimSpace(additionalType) == "" {
 		return sqlType
 	}
 	return fmt.Sprintf("%v %v", sqlType, additionalType)
@@ -152,11 +152,11 @@ func (commonDialect) LimitAndOffsetSQL(limit, offset interface{}) (sql string) {
 }
 
 func (commonDialect) SelectFromDummyTable() string {
-	return 
+	return ""
 }
 
 func (commonDialect) LastInsertIDReturningSuffix(tableName, columnName string) string {
-	return 
+	return ""
 }
 
 func (commonDialect) DefaultValueStr() string {

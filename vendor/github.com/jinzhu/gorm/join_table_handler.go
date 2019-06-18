@@ -103,7 +103,7 @@ func (s JoinTableHandler) updateConditionMap(conditionMap map[string]interface{}
 // Add create relationship in join table for source and destination
 func (s JoinTableHandler) Add(handler JoinTableHandlerInterface, db *DB, source interface{}, destination interface{}) error {
 	var (
-		scope        = db.NewScope()
+		scope        = db.NewScope("")
 		conditionMap = map[string]interface{}{}
 	)
 
@@ -156,7 +156,7 @@ func (s JoinTableHandler) Delete(handler JoinTableHandlerInterface, db *DB, sour
 		values = append(values, value)
 	}
 
-	return db.Table(handler.Table(db)).Where(strings.Join(conditions, " AND "), values...).Delete().Error
+	return db.Table(handler.Table(db)).Where(strings.Join(conditions, " AND "), values...).Delete("").Error
 }
 
 // JoinWith query with `Join` conditions

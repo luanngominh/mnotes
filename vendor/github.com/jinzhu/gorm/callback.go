@@ -92,7 +92,7 @@ func (cp *CallbackProcessor) Before(callbackName string) *CallbackProcessor {
 // Register a new callback, refer `Callbacks.Create`
 func (cp *CallbackProcessor) Register(callbackName string, callback func(scope *Scope)) {
 	if cp.kind == "row_query" {
-		if cp.before ==  && cp.after ==  && callbackName != "gorm:row_query" {
+		if cp.before == "" && cp.after == "" && callbackName != "gorm:row_query" {
 			log.Printf("Registing RowQuery callback %v without specify order with Before(), After(), applying Before('gorm:row_query') by default for compatibility...\n", callbackName)
 			cp.before = "gorm:row_query"
 		}
@@ -166,7 +166,7 @@ func sortProcessors(cps []*CallbackProcessor) []*func(scope *Scope) {
 
 	sortCallbackProcessor = func(c *CallbackProcessor) {
 		if getRIndex(sortedNames, c.name) == -1 { // if not sorted
-			if c.before !=  { // if defined before callback
+			if c.before != "" { // if defined before callback
 				if index := getRIndex(sortedNames, c.before); index != -1 {
 					// if before callback already sorted, append current callback just after it
 					sortedNames = append(sortedNames[:index], append([]string{c.name}, sortedNames[index:]...)...)
@@ -177,7 +177,7 @@ func sortProcessors(cps []*CallbackProcessor) []*func(scope *Scope) {
 				}
 			}
 
-			if c.after !=  { // if defined after callback
+			if c.after != "" { // if defined after callback
 				if index := getRIndex(sortedNames, c.after); index != -1 {
 					// if after callback already sorted, append current callback just before it
 					sortedNames = append(sortedNames[:index+1], append([]string{c.name}, sortedNames[index+1:]...)...)
@@ -185,7 +185,7 @@ func sortProcessors(cps []*CallbackProcessor) []*func(scope *Scope) {
 					// if after callback exists but haven't sorted
 					cp := cps[index]
 					// set after callback's before callback to current callback
-					if cp.before ==  {
+					if cp.before == "" {
 						cp.before = c.name
 					}
 					sortCallbackProcessor(cp)
@@ -218,7 +218,7 @@ func (c *Callback) reorder() {
 	var creates, updates, deletes, queries, rowQueries []*CallbackProcessor
 
 	for _, processor := range c.processors {
-		if processor.name !=  {
+		if processor.name != "" {
 			switch processor.kind {
 			case "create":
 				creates = append(creates, processor)

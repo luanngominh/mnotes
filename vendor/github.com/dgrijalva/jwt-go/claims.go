@@ -91,7 +91,7 @@ func (c *StandardClaims) VerifyNotBefore(cmp int64, req bool) bool {
 // ----- helpers
 
 func verifyAud(aud string, cmp string, required bool) bool {
-	if aud ==  {
+	if aud == "" {
 		return !required
 	}
 	if subtle.ConstantTimeCompare([]byte(aud), []byte(cmp)) != 0 {
@@ -116,7 +116,7 @@ func verifyIat(iat int64, now int64, required bool) bool {
 }
 
 func verifyIss(iss string, cmp string, required bool) bool {
-	if iss ==  {
+	if iss == "" {
 		return !required
 	}
 	if subtle.ConstantTimeCompare([]byte(iss), []byte(cmp)) != 0 {

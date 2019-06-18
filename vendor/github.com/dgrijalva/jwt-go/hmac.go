@@ -82,7 +82,7 @@ func (m *SigningMethodHMAC) Verify(signingString, signature string, key interfac
 func (m *SigningMethodHMAC) Sign(signingString string, key interface{}) (string, error) {
 	if keyBytes, ok := key.([]byte); ok {
 		if !m.Hash.Available() {
-			return , ErrHashUnavailable
+			return "", ErrHashUnavailable
 		}
 
 		hasher := hmac.New(m.Hash.New, keyBytes)
@@ -91,5 +91,5 @@ func (m *SigningMethodHMAC) Sign(signingString string, key interface{}) (string,
 		return EncodeSegment(hasher.Sum(nil)), nil
 	}
 
-	return , ErrInvalidKeyType
+	return "", ErrInvalidKeyType
 }

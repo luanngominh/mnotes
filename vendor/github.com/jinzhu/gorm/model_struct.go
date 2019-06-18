@@ -34,7 +34,7 @@ func (s *ModelStruct) TableName(db *DB) string {
 	s.l.Lock()
 	defer s.l.Unlock()
 
-	if s.defaultTableName ==  && db != nil && s.ModelType != nil {
+	if s.defaultTableName == "" && db != nil && s.ModelType != nil {
 		// Set default table name
 		if tabler, ok := reflect.New(s.ModelType).Interface().(tabler); ok {
 			s.defaultTableName = tabler.TableName()
@@ -259,13 +259,13 @@ func (scope *Scope) GetModelStruct() *ModelStruct {
 								elemType               = field.Struct.Type
 							)
 
-							if foreignKey, _ := field.TagSettingsGet("FOREIGNKEY"); foreignKey !=  {
+							if foreignKey, _ := field.TagSettingsGet("FOREIGNKEY"); foreignKey != "" {
 								foreignKeys = strings.Split(foreignKey, ",")
 							}
 
-							if foreignKey, _ := field.TagSettingsGet("ASSOCIATION_FOREIGNKEY"); foreignKey !=  {
+							if foreignKey, _ := field.TagSettingsGet("ASSOCIATION_FOREIGNKEY"); foreignKey != "" {
 								associationForeignKeys = strings.Split(foreignKey, ",")
-							} else if foreignKey, _ := field.TagSettingsGet("ASSOCIATIONFOREIGNKEY"); foreignKey !=  {
+							} else if foreignKey, _ := field.TagSettingsGet("ASSOCIATIONFOREIGNKEY"); foreignKey != "" {
 								associationForeignKeys = strings.Split(foreignKey, ",")
 							}
 
@@ -274,13 +274,13 @@ func (scope *Scope) GetModelStruct() *ModelStruct {
 							}
 
 							if elemType.Kind() == reflect.Struct {
-								if many2many, _ := field.TagSettingsGet("MANY2MANY"); many2many !=  {
+								if many2many, _ := field.TagSettingsGet("MANY2MANY"); many2many != "" {
 									relationship.Kind = "many_to_many"
 
 									{ // Foreign Keys for Source
 										joinTableDBNames := []string{}
 
-										if foreignKey, _ := field.TagSettingsGet("JOINTABLE_FOREIGNKEY"); foreignKey !=  {
+										if foreignKey, _ := field.TagSettingsGet("JOINTABLE_FOREIGNKEY"); foreignKey != "" {
 											joinTableDBNames = strings.Split(foreignKey, ",")
 										}
 
@@ -311,7 +311,7 @@ func (scope *Scope) GetModelStruct() *ModelStruct {
 									{ // Foreign Keys for Association (Destination)
 										associationJoinTableDBNames := []string{}
 
-										if foreignKey, _ := field.TagSettingsGet("ASSOCIATION_JOINTABLE_FOREIGNKEY"); foreignKey !=  {
+										if foreignKey, _ := field.TagSettingsGet("ASSOCIATION_JOINTABLE_FOREIGNKEY"); foreignKey != "" {
 											associationJoinTableDBNames = strings.Split(foreignKey, ",")
 										}
 
@@ -349,7 +349,7 @@ func (scope *Scope) GetModelStruct() *ModelStruct {
 									var toFields = toScope.GetStructFields()
 									relationship.Kind = "has_many"
 
-									if polymorphic, _ := field.TagSettingsGet("POLYMORPHIC"); polymorphic !=  {
+									if polymorphic, _ := field.TagSettingsGet("POLYMORPHIC"); polymorphic != "" {
 										// Dog has many toys, tag polymorphic is Owner, then associationType is Owner
 										// Toy use OwnerID, OwnerType ('dogs') as foreign key
 										if polymorphicType := getForeignField(polymorphic+"Type", toFields); polymorphicType != nil {
@@ -439,17 +439,17 @@ func (scope *Scope) GetModelStruct() *ModelStruct {
 								tagAssociationForeignKeys []string
 							)
 
-							if foreignKey, _ := field.TagSettingsGet("FOREIGNKEY"); foreignKey !=  {
+							if foreignKey, _ := field.TagSettingsGet("FOREIGNKEY"); foreignKey != "" {
 								tagForeignKeys = strings.Split(foreignKey, ",")
 							}
 
-							if foreignKey, _ := field.TagSettingsGet("ASSOCIATION_FOREIGNKEY"); foreignKey !=  {
+							if foreignKey, _ := field.TagSettingsGet("ASSOCIATION_FOREIGNKEY"); foreignKey != "" {
 								tagAssociationForeignKeys = strings.Split(foreignKey, ",")
-							} else if foreignKey, _ := field.TagSettingsGet("ASSOCIATIONFOREIGNKEY"); foreignKey !=  {
+							} else if foreignKey, _ := field.TagSettingsGet("ASSOCIATIONFOREIGNKEY"); foreignKey != "" {
 								tagAssociationForeignKeys = strings.Split(foreignKey, ",")
 							}
 
-							if polymorphic, _ := field.TagSettingsGet("POLYMORPHIC"); polymorphic !=  {
+							if polymorphic, _ := field.TagSettingsGet("POLYMORPHIC"); polymorphic != "" {
 								// Cat has one toy, tag polymorphic is Owner, then associationType is Owner
 								// Toy use OwnerID, OwnerType ('cats') as foreign key
 								if polymorphicType := getForeignField(polymorphic+"Type", toFields); polymorphicType != nil {

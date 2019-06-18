@@ -30,15 +30,15 @@ func main() {
 	datname := os.Getenv("PGDATABASE")
 	sslmode := os.Getenv("PGSSLMODE")
 
-	if datname ==  {
+	if datname == "" {
 		os.Setenv("PGDATABASE", "pqgotest")
 	}
 
-	if sslmode ==  {
+	if sslmode == "" {
 		os.Setenv("PGSSLMODE", "disable")
 	}
 
-	db, err := sql.Open("postgres", )
+	db, err := sql.Open("postgres", "")
 	if err != nil {
 		log.Fatal(err)
 	}

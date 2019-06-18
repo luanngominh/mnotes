@@ -77,7 +77,7 @@ var pluralInflections = RegularSlice{
 }
 
 var singularInflections = RegularSlice{
-	{"s$", },
+	{"s$", ""},
 	{"(ss)$", "${1}"},
 	{"(n)ews$", "${1}ews"},
 	{"([ti])a$", "${1}um"},

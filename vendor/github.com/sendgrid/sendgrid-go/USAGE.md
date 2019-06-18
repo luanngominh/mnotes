@@ -945,7 +945,7 @@ request.Body = []byte(` {
   "categories": [
     "spring line"
   ],
-  "custom_unsubscribe_url": ,
+  "custom_unsubscribe_url": "",
   "html_content": "<html><head><title></title></head><body><p>Check out our spring line!</p></body></html>",
   "ip_pool": "marketing",
   "list_ids": [
@@ -1782,7 +1782,7 @@ request.Body = []byte(` [
   {
     "age": 25,
     "email": "example@example.com",
-    "first_name": ,
+    "first_name": "",
     "last_name": "User"
   },
   {
@@ -2054,7 +2054,7 @@ request.Method = "POST"
 request.Body = []byte(` {
   "conditions": [
     {
-      "and_or": ,
+      "and_or": "",
       "field": "last_name",
       "operator": "eq",
       "value": "Miller"
@@ -2124,7 +2124,7 @@ request.Method = "PATCH"
 request.Body = []byte(` {
   "conditions": [
     {
-      "and_or": ,
+      "and_or": "",
       "field": "last_name",
       "operator": "eq",
       "value": "Miller"
@@ -3172,7 +3172,7 @@ Mail settings allow you to tell SendGrid specific things to do to every email th
 request := sendgrid.GetRequest(apiKey, "/v3/mail_settings/forward_spam", host)
 request.Method = "PATCH"
 request.Body = []byte(` {
-  "email": ,
+  "email": "",
   "enabled": false
 }`)
 response, err := sendgrid.API(request)
@@ -3440,7 +3440,7 @@ request.Method = "PATCH"
 request.Body = []byte(` {
   "enable_subuser_statistics": true,
   "enabled": true,
-  "license_key": 
+  "license_key": ""
 }`)
 response, err := sendgrid.API(request)
 if err != nil {
@@ -4954,10 +4954,10 @@ request.Method = "PATCH"
 request.Body = []byte(` {
   "enabled": true,
   "utm_campaign": "website",
-  "utm_content": ,
+  "utm_content": "",
   "utm_medium": "email",
   "utm_source": "sendgrid.com",
-  "utm_term": 
+  "utm_term": ""
 }`)
 response, err := sendgrid.API(request)
 if err != nil {

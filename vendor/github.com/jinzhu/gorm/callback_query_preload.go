@@ -146,7 +146,7 @@ func (scope *Scope) handleHasOnePreload(field *Field, conditions []interface{}) 
 	// find relations
 	query := fmt.Sprintf("%v IN (%v)", toQueryCondition(scope, relation.ForeignDBNames), toQueryMarks(primaryKeys))
 	values := toQueryValues(primaryKeys)
-	if relation.PolymorphicType !=  {
+	if relation.PolymorphicType != "" {
 		query += fmt.Sprintf(" AND %v = ?", scope.Quote(relation.PolymorphicDBName))
 		values = append(values, relation.PolymorphicValue)
 	}
@@ -198,7 +198,7 @@ func (scope *Scope) handleHasManyPreload(field *Field, conditions []interface{})
 	// find relations
 	query := fmt.Sprintf("%v IN (%v)", toQueryCondition(scope, relation.ForeignDBNames), toQueryMarks(primaryKeys))
 	values := toQueryValues(primaryKeys)
-	if relation.PolymorphicType !=  {
+	if relation.PolymorphicType != "" {
 		query += fmt.Sprintf(" AND %v = ?", scope.Quote(relation.PolymorphicDBName))
 		values = append(values, relation.PolymorphicValue)
 	}

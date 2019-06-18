@@ -74,17 +74,17 @@ func defaultNamer(name string) string {
 		upper = true
 	)
 
-	if v := smap.Get(name); v !=  {
+	if v := smap.Get(name); v != "" {
 		return v
 	}
 
-	if name ==  {
-		return 
+	if name == "" {
+		return ""
 	}
 
 	var (
 		value                                    = commonInitialismsReplacer.Replace(name)
-		buf                                      = bytes.NewBufferString()
+		buf                                      = bytes.NewBufferString("")
 		lastCase, currCase, nextCase, nextNumber bool
 	)
 

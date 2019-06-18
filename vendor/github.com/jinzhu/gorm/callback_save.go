@@ -119,7 +119,7 @@ func saveAfterAssociationsCallback(scope *Scope) {
 							}
 						}
 
-						if relationship.PolymorphicType !=  {
+						if relationship.PolymorphicType != "" {
 							scope.Err(newScope.SetColumn(relationship.PolymorphicType, relationship.PolymorphicValue))
 						}
 					}
@@ -152,7 +152,7 @@ func saveAfterAssociationsCallback(scope *Scope) {
 						}
 					}
 
-					if relationship.PolymorphicType !=  {
+					if relationship.PolymorphicType != "" {
 						scope.Err(newScope.SetColumn(relationship.PolymorphicType, relationship.PolymorphicValue))
 					}
 				}

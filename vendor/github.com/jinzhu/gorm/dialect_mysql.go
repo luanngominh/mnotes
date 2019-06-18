@@ -39,7 +39,7 @@ func (s *mysql) DataTypeOf(field *StructField) string {
 		}
 	}
 
-	if sqlType ==  {
+	if sqlType == "" {
 		switch dataValue.Kind() {
 		case reflect.Bool:
 			sqlType = "boolean"
@@ -95,7 +95,7 @@ func (s *mysql) DataTypeOf(field *StructField) string {
 			}
 		case reflect.Struct:
 			if _, ok := dataValue.Interface().(time.Time); ok {
-				precision := 
+				precision := ""
 				if p, ok := field.TagSettingsGet("PRECISION"); ok {
 					precision = fmt.Sprintf("(%s)", p)
 				}
@@ -117,11 +117,11 @@ func (s *mysql) DataTypeOf(field *StructField) string {
 		}
 	}
 
-	if sqlType ==  {
+	if sqlType == "" {
 		panic(fmt.Sprintf("invalid sql type %s (%s) for mysql", dataValue.Type().Name(), dataValue.Kind().String()))
 	}
 
-	if strings.TrimSpace(additionalType) ==  {
+	if strings.TrimSpace(additionalType) == "" {
 		return sqlType
 	}
 	return fmt.Sprintf("%v %v", sqlType, additionalType)

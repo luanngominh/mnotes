@@ -583,7 +583,7 @@ func appendArrayElement(b []byte, rv reflect.Value) ([]byte, string, error) {
 				return appendArray(b, rv, n)
 			}
 
-			return b, , nil
+			return b, "", nil
 		}
 	}
 

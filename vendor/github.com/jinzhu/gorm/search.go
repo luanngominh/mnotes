@@ -66,7 +66,7 @@ func (s *search) Order(value interface{}, reorder ...bool) *search {
 		s.orders = []interface{}{}
 	}
 
-	if value != nil && value !=  {
+	if value != nil && value != "" {
 		s.orders = append(s.orders, value)
 	}
 	return s
@@ -147,7 +147,7 @@ func (s *search) getInterfaceAsSQL(value interface{}) (str string) {
 	}
 
 	if str == "-1" {
-		return 
+		return ""
 	}
 	return
 }

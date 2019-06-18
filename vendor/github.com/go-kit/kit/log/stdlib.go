@@ -68,19 +68,19 @@ func (a StdlibAdapter) Write(p []byte) (int, error) {
 	result := subexps(p)
 	keyvals := []interface{}{}
 	var timestamp string
-	if date, ok := result["date"]; ok && date !=  {
+	if date, ok := result["date"]; ok && date != "" {
 		timestamp = date
 	}
-	if time, ok := result["time"]; ok && time !=  {
-		if timestamp !=  {
+	if time, ok := result["time"]; ok && time != "" {
+		if timestamp != "" {
 			timestamp += " "
 		}
 		timestamp += time
 	}
-	if timestamp !=  {
+	if timestamp != "" {
 		keyvals = append(keyvals, a.timestampKey, timestamp)
 	}
-	if file, ok := result["file"]; ok && file !=  {
+	if file, ok := result["file"]; ok && file != "" {
 		keyvals = append(keyvals, a.fileKey, file)
 	}
 	if msg, ok := result["msg"]; ok {

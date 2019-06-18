@@ -232,7 +232,7 @@ func (l *ListenerConn) UnlistenAll() (bool, error) {
 // Ping the remote server to make sure it's alive.  Non-nil error means the
 // connection has failed and should be abandoned.
 func (l *ListenerConn) Ping() error {
-	sent, err := l.ExecSimpleQuery()
+	sent, err := l.ExecSimpleQuery("")
 	if !sent {
 		return err
 	}

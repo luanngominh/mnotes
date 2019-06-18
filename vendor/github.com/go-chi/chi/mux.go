@@ -291,7 +291,7 @@ func (mx *Mux) Mount(pattern string, handler http.Handler) {
 		handler.ServeHTTP(w, r)
 	})
 
-	if pattern ==  || pattern[len(pattern)-1] != '/' {
+	if pattern == "" || pattern[len(pattern)-1] != '/' {
 		mx.handle(mALL|mSTUB, pattern, mountHandler)
 		mx.handle(mALL|mSTUB, pattern+"/", mountHandler)
 		pattern += "/"
@@ -401,8 +401,8 @@ func (mx *Mux) routeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// The request routing path
 	routePath := rctx.RoutePath
-	if routePath ==  {
-		if r.URL.RawPath !=  {
+	if routePath == "" {
+		if r.URL.RawPath != "" {
 			routePath = r.URL.RawPath
 		} else {
 			routePath = r.URL.Path
@@ -410,7 +410,7 @@ func (mx *Mux) routeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if method is supported by chi
-	if rctx.RouteMethod ==  {
+	if rctx.RouteMethod == "" {
 		rctx.RouteMethod = r.Method
 	}
 	method, ok := methodMap[rctx.RouteMethod]

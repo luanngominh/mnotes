@@ -30,7 +30,7 @@ func (fd fieldDesc) Type() reflect.Type {
 	case oid.T_int2:
 		return reflect.TypeOf(int16(0))
 	case oid.T_varchar, oid.T_text:
-		return reflect.TypeOf()
+		return reflect.TypeOf("")
 	case oid.T_bool:
 		return reflect.TypeOf(false)
 	case oid.T_date, oid.T_time, oid.T_timetz, oid.T_timestamp, oid.T_timestamptz:

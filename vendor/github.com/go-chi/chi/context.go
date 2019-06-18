@@ -54,13 +54,13 @@ func NewRouteContext() *Context {
 // Reset a routing context to its initial state.
 func (x *Context) Reset() {
 	x.Routes = nil
-	x.RoutePath = 
-	x.RouteMethod = 
+	x.RoutePath = ""
+	x.RouteMethod = ""
 	x.RoutePatterns = x.RoutePatterns[:0]
 	x.URLParams.Keys = x.URLParams.Keys[:0]
 	x.URLParams.Values = x.URLParams.Values[:0]
 
-	x.routePattern = 
+	x.routePattern = ""
 	x.routeParams.Keys = x.routeParams.Keys[:0]
 	x.routeParams.Values = x.routeParams.Values[:0]
 	x.methodNotAllowed = false
@@ -74,7 +74,7 @@ func (x *Context) URLParam(key string) string {
 			return x.URLParams.Values[k]
 		}
 	}
-	return 
+	return ""
 }
 
 // RoutePattern builds the routing pattern string for the particular
@@ -92,7 +92,7 @@ func (x *Context) URLParam(key string) string {
 //   	 })
 //   }
 func (x *Context) RoutePattern() string {
-	routePattern := strings.Join(x.RoutePatterns, )
+	routePattern := strings.Join(x.RoutePatterns, "")
 	return strings.Replace(routePattern, "/*/", "/", -1)
 }
 
@@ -107,7 +107,7 @@ func URLParam(r *http.Request, key string) string {
 	if rctx := RouteContext(r.Context()); rctx != nil {
 		return rctx.URLParam(key)
 	}
-	return 
+	return ""
 }
 
 // URLParamFromCtx returns the url parameter from a http.Request Context.
@@ -115,7 +115,7 @@ func URLParamFromCtx(ctx context.Context, key string) string {
 	if rctx := RouteContext(ctx); rctx != nil {
 		return rctx.URLParam(key)
 	}
-	return 
+	return ""
 }
 
 // RouteParams is a structure to track URL routing parameters efficiently.

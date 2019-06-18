@@ -271,7 +271,7 @@ func (c *locationCache) getLocation(offset int) *time.Location {
 
 	location, ok := c.cache[offset]
 	if !ok {
-		location = time.FixedZone(, offset)
+		location = time.FixedZone("", offset)
 		c.cache[offset] = location
 	}
 

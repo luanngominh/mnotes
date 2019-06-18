@@ -100,7 +100,7 @@ var ParseFieldStructForDialect = func(field *StructField, dialect Dialect) (fiel
 	}
 
 	// Get scanner's real value
-	if dataType ==  {
+	if dataType == "" {
 		var getScannerValue func(reflect.Value)
 		getScannerValue = func(value reflect.Value) {
 			fieldValue = value

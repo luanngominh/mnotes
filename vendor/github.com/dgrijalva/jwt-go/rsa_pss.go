@@ -106,12 +106,12 @@ func (m *SigningMethodRSAPSS) Sign(signingString string, key interface{}) (strin
 	case *rsa.PrivateKey:
 		rsaKey = k
 	default:
-		return , ErrInvalidKeyType
+		return "", ErrInvalidKeyType
 	}
 
 	// Create the hasher
 	if !m.Hash.Available() {
-		return , ErrHashUnavailable
+		return "", ErrHashUnavailable
 	}
 
 	hasher := m.Hash.New()
@@ -121,6 +121,6 @@ func (m *SigningMethodRSAPSS) Sign(signingString string, key interface{}) (strin
 	if sigBytes, err := rsa.SignPSS(rand.Reader, rsaKey, m.Hash, hasher.Sum(nil), m.Options); err == nil {
 		return EncodeSegment(sigBytes), nil
 	} else {
-		return , err
+		return "", err
 	}
 }

@@ -47,7 +47,7 @@ var methodMap = map[string]methodTyp{
 // RegisterMethod adds support for custom HTTP method handlers, available
 // via Router#Method and Router#MethodFunc
 func RegisterMethod(method string) {
-	if method ==  {
+	if method == "" {
 		return
 	}
 	method = strings.ToUpper(method)
@@ -360,7 +360,7 @@ func (n *node) setEndpoint(method methodTyp, handler http.Handler, pattern strin
 
 func (n *node) FindRoute(rctx *Context, method methodTyp, path string) (*node, endpoints, http.Handler) {
 	// Reset the context routing pattern and params
-	rctx.routePattern = 
+	rctx.routePattern = ""
 	rctx.routeParams.Keys = rctx.routeParams.Keys[:0]
 	rctx.routeParams.Values = rctx.routeParams.Values[:0]
 
@@ -375,7 +375,7 @@ func (n *node) FindRoute(rctx *Context, method methodTyp, path string) (*node, e
 	rctx.URLParams.Values = append(rctx.URLParams.Values, rctx.routeParams.Values...)
 
 	// Record the routing pattern in the request lifecycle
-	if rn.endpoints[method].pattern !=  {
+	if rn.endpoints[method].pattern != "" {
 		rctx.routePattern = rn.endpoints[method].pattern
 		rctx.RoutePatterns = append(rctx.RoutePatterns, rctx.routePattern)
 	}
@@ -399,7 +399,7 @@ func (n *node) findRoute(rctx *Context, method methodTyp, path string) *node {
 		xsearch := search
 
 		var label byte
-		if search !=  {
+		if search != "" {
 			label = search[0]
 		}
 
@@ -413,7 +413,7 @@ func (n *node) findRoute(rctx *Context, method methodTyp, path string) *node {
 
 		case ntParam, ntRegexp:
 			// short-circuit and return no matching route for empty param values
-			if xsearch ==  {
+			if xsearch == "" {
 				continue
 			}
 
@@ -450,7 +450,7 @@ func (n *node) findRoute(rctx *Context, method methodTyp, path string) *node {
 			// catch-all nodes
 			rctx.routeParams.Values = append(rctx.routeParams.Values, search)
 			xn = nds[0]
-			xsearch = 
+			xsearch = ""
 		}
 
 		if xn == nil {
@@ -585,7 +585,7 @@ func (n *node) routes() []Route {
 		pats := make(map[string]endpoints, 0)
 
 		for mt, h := range eps {
-			if h.pattern ==  {
+			if h.pattern == "" {
 				continue
 			}
 			p, ok := pats[h.pattern]
@@ -607,7 +607,7 @@ func (n *node) routes() []Route {
 					continue
 				}
 				m := methodTypString(mt)
-				if m ==  {
+				if m == "" {
 					continue
 				}
 				hs[m] = h.handler
@@ -647,7 +647,7 @@ func patNextSegment(pattern string) (nodeTyp, string, string, byte, int, int) {
 	ws := strings.Index(pattern, "*")
 
 	if ps < 0 && ws < 0 {
-		return ntStatic, , , 0, 0, len(pattern) // we return the entire thing
+		return ntStatic, "", "", 0, 0, len(pattern) // we return the entire thing
 	}
 
 	// Sanity check
@@ -707,7 +707,7 @@ func patNextSegment(pattern string) (nodeTyp, string, string, byte, int, int) {
 
 	// Wildcard pattern as finale
 	// TODO: should we panic if there is stuff after the * ???
-	return ntCatchAll, "*", , 0, ws, len(pattern)
+	return ntCatchAll, "*", "", 0, ws, len(pattern)
 }
 
 func patParamKeys(pattern string) []string {
@@ -750,7 +750,7 @@ func methodTypString(method methodTyp) string {
 			return s
 		}
 	}
-	return 
+	return ""
 }
 
 type nodes []*node
@@ -804,7 +804,7 @@ type WalkFunc func(method string, route string, handler http.Handler, middleware
 
 // Walk walks any router tree that implements Routes interface.
 func Walk(r Routes, walkFn WalkFunc) error {
-	return walk(r, walkFn, )
+	return walk(r, walkFn, "")
 }
 
 func walk(r Routes, walkFn WalkFunc, parentRoute string, parentMw ...func(http.Handler) http.Handler) error {

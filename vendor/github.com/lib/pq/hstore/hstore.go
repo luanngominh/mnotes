@@ -28,7 +28,7 @@ func hQuote(s interface{}) string {
 	}
 
 	str = strings.Replace(str, "\\", "\\\\", -1)
-	return `"` + strings.Replace(str, "\, "\\\, -1) + `"`
+	return `"` + strings.Replace(str, "\"", "\\\"", -1) + `"`
 }
 
 // Scan implements the Scanner interface.
@@ -79,7 +79,7 @@ func (h *Hstore) Scan(value interface{}) error {
 				case ',':
 					s := string(pair[1])
 					if !didQuote && len(s) == 4 && strings.ToLower(s) == "null" {
-						h.Map[string(pair[0])] = sql.NullString{String: , Valid: false}
+						h.Map[string(pair[0])] = sql.NullString{String: "", Valid: false}
 					} else {
 						h.Map[string(pair[0])] = sql.NullString{String: string(pair[1]), Valid: true}
 					}
@@ -95,7 +95,7 @@ func (h *Hstore) Scan(value interface{}) error {
 	if bindex > 0 {
 		s := string(pair[1])
 		if !didQuote && len(s) == 4 && strings.ToLower(s) == "null" {
-			h.Map[string(pair[0])] = sql.NullString{String: , Valid: false}
+			h.Map[string(pair[0])] = sql.NullString{String: "", Valid: false}
 		} else {
 			h.Map[string(pair[0])] = sql.NullString{String: string(pair[1]), Valid: true}
 		}

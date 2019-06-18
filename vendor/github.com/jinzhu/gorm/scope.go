@@ -177,7 +177,7 @@ func (scope *Scope) PrimaryKey() string {
 	if field := scope.PrimaryField(); field != nil {
 		return field.DBName
 	}
-	return 
+	return ""
 }
 
 // PrimaryKeyZero check main primary field's value is blank or not
@@ -383,7 +383,7 @@ func (scope *Scope) Get(name string) (interface{}, bool) {
 
 // InstanceID get InstanceID for scope
 func (scope *Scope) InstanceID() string {
-	if scope.instanceID ==  {
+	if scope.instanceID == "" {
 		scope.instanceID = fmt.Sprintf("%v%v", &scope, &scope.db)
 	}
 	return scope.instanceID
@@ -555,7 +555,7 @@ func (scope *Scope) buildCondition(clause map[string]interface{}, include bool) 
 			return fmt.Sprintf("(%v.%v %s %v)", quotedTableName, quotedPrimaryKey, equalSQL, scope.AddToVars(value))
 		}
 
-		if value !=  {
+		if value != "" {
 			if !include {
 				if comparisonRegexp.MatchString(value) {
 					str = fmt.Sprintf("NOT (%v)", value)
@@ -728,19 +728,19 @@ func (scope *Scope) whereSQL() (sql string) {
 	}
 
 	for _, clause := range scope.Search.whereConditions {
-		if sql := scope.buildCondition(clause, true); sql !=  {
+		if sql := scope.buildCondition(clause, true); sql != "" {
 			andConditions = append(andConditions, sql)
 		}
 	}
 
 	for _, clause := range scope.Search.orConditions {
-		if sql := scope.buildCondition(clause, true); sql !=  {
+		if sql := scope.buildCondition(clause, true); sql != "" {
 			orConditions = append(orConditions, sql)
 		}
 	}
 
 	for _, clause := range scope.Search.notConditions {
-		if sql := scope.buildCondition(clause, false); sql !=  {
+		if sql := scope.buildCondition(clause, false); sql != "" {
 			andConditions = append(andConditions, sql)
 		}
 	}
@@ -778,7 +778,7 @@ func (scope *Scope) selectSQL() string {
 
 func (scope *Scope) orderSQL() string {
 	if len(scope.Search.orders) == 0 || scope.Search.ignoreOrderQuery {
-		return 
+		return ""
 	}
 
 	var orders []string
@@ -802,26 +802,26 @@ func (scope *Scope) limitAndOffsetSQL() string {
 
 func (scope *Scope) groupSQL() string {
 	if len(scope.Search.group) == 0 {
-		return 
+		return ""
 	}
 	return " GROUP BY " + scope.Search.group
 }
 
 func (scope *Scope) havingSQL() string {
 	if len(scope.Search.havingConditions) == 0 {
-		return 
+		return ""
 	}
 
 	var andConditions []string
 	for _, clause := range scope.Search.havingConditions {
-		if sql := scope.buildCondition(clause, true); sql !=  {
+		if sql := scope.buildCondition(clause, true); sql != "" {
 			andConditions = append(andConditions, sql)
 		}
 	}
 
 	combinedSQL := strings.Join(andConditions, " AND ")
 	if len(combinedSQL) == 0 {
-		return 
+		return ""
 	}
 
 	return " HAVING " + combinedSQL
@@ -830,7 +830,7 @@ func (scope *Scope) havingSQL() string {
 func (scope *Scope) joinsSQL() string {
 	var joinConditions []string
 	for _, clause := range scope.Search.joinConditions {
-		if sql := scope.buildCondition(clause, true); sql !=  {
+		if sql := scope.buildCondition(clause, true); sql != "" {
 			joinConditions = append(joinConditions, strings.TrimSuffix(strings.TrimPrefix(sql, "("), ")"))
 		}
 	}
@@ -1081,7 +1081,7 @@ func (scope *Scope) related(value interface{}, foreignKeys ...string) *Scope {
 						}
 					}
 
-					if relationship.PolymorphicType !=  {
+					if relationship.PolymorphicType != "" {
 						tx = tx.Where(fmt.Sprintf("%v = ?", scope.Quote(relationship.PolymorphicDBName)), relationship.PolymorphicValue)
 					}
 					scope.Err(tx.Find(value).Error)
@@ -1106,7 +1106,7 @@ func (scope *Scope) related(value interface{}, foreignKeys ...string) *Scope {
 func (scope *Scope) getTableOptions() string {
 	tableOptions, ok := scope.Get("gorm:table_options")
 	if !ok {
-		return 
+		return ""
 	}
 	return " " + tableOptions.(string)
 }
@@ -1274,7 +1274,7 @@ func (scope *Scope) autoIndex() *Scope {
 			names := strings.Split(name, ",")
 
 			for _, name := range names {
-				if name == "INDEX" || name ==  {
+				if name == "INDEX" || name == "" {
 					name = scope.Dialect().BuildKeyName("idx", scope.TableName(), field.DBName)
 				}
 				indexes[name] = append(indexes[name], field.DBName)
@@ -1285,7 +1285,7 @@ func (scope *Scope) autoIndex() *Scope {
 			names := strings.Split(name, ",")
 
 			for _, name := range names {
-				if name == "UNIQUE_INDEX" || name ==  {
+				if name == "UNIQUE_INDEX" || name == "" {
 					name = scope.Dialect().BuildKeyName("uix", scope.TableName(), field.DBName)
 				}
 				uniqueIndexes[name] = append(uniqueIndexes[name], field.DBName)

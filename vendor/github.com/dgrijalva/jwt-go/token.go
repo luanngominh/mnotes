@@ -50,10 +50,10 @@ func (t *Token) SignedString(key interface{}) (string, error) {
 	var sig, sstr string
 	var err error
 	if sstr, err = t.SigningString(); err != nil {
-		return , err
+		return "", err
 	}
 	if sig, err = t.Method.Sign(sstr, key); err != nil {
-		return , err
+		return "", err
 	}
 	return strings.Join([]string{sstr, sig}, "."), nil
 }
@@ -69,11 +69,11 @@ func (t *Token) SigningString() (string, error) {
 		var jsonValue []byte
 		if i == 0 {
 			if jsonValue, err = json.Marshal(t.Header); err != nil {
-				return , err
+				return "", err
 			}
 		} else {
 			if jsonValue, err = json.Marshal(t.Claims); err != nil {
-				return , err
+				return "", err
 			}
 		}
 

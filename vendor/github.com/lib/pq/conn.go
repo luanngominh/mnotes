@@ -164,12 +164,12 @@ func (cn *conn) handlePgpass(o values) {
 		return
 	}
 	filename := os.Getenv("PGPASSFILE")
-	if filename ==  {
+	if filename == "" {
 		// XXX this code doesn't work on Windows where the default filename is
 		// XXX %APPDATA%\postgresql\pgpass.conf
 		// Prefer $HOME over user.Current due to glibc bug: golang.org/issue/13470
 		userHome := os.Getenv("HOME")
-		if userHome ==  {
+		if userHome == "" {
 			user, err := user.Current()
 			if err != nil {
 				return
@@ -229,7 +229,7 @@ func (cn *conn) handlePgpass(o values) {
 		if len(split) != 5 {
 			continue
 		}
-		if (split[0] == "*" || split[0] == hostname || (split[0] == "localhost" && (hostname ==  || ntw == "unix"))) && (split[1] == "*" || split[1] == port) && (split[2] == "*" || split[2] == db) && (split[3] == "*" || split[3] == username) {
+		if (split[0] == "*" || split[0] == hostname || (split[0] == "localhost" && (hostname == "" || ntw == "unix"))) && (split[1] == "*" || split[1] == port) && (split[2] == "*" || split[2] == db) && (split[3] == "*" || split[3] == username) {
 			o["password"] = split[4]
 			return
 		}
@@ -476,7 +476,7 @@ func parseOpts(name string, o values) error {
 		// Skip any whitespace after the =
 		if r, ok = s.SkipSpaces(); !ok {
 			// If we reach the end here, the last value is just an empty string as per libpq.
-			o[string(keyRunes)] = 
+			o[string(keyRunes)] = ""
 			break
 		}
 
@@ -530,7 +530,7 @@ func (cn *conn) checkIsInTransaction(intxn bool) {
 }
 
 func (cn *conn) Begin() (_ driver.Tx, err error) {
-	return cn.begin()
+	return cn.begin("")
 }
 
 func (cn *conn) begin(mode string) (_ driver.Tx, err error) {
@@ -865,7 +865,7 @@ func (cn *conn) query(query string, args []driver.Value) (_ *rows, err error) {
 		cn.postExecuteWorkaround()
 		return rows, nil
 	}
-	st := cn.prepareTo(query, )
+	st := cn.prepareTo(query, "")
 	st.exec(args)
 	return &rows{
 		cn:       cn,
@@ -903,7 +903,7 @@ func (cn *conn) Exec(query string, args []driver.Value) (res driver.Result, err 
 	// Use the unnamed statement to defer planning until bind
 	// time, or else value-based selectivity estimates cannot be
 	// used.
-	st := cn.prepareTo(query, )
+	st := cn.prepareTo(query, "")
 	r, err := st.Exec(args)
 	if err != nil {
 		panic(err)
@@ -1109,7 +1109,7 @@ func (cn *conn) startup(o values) {
 		w.string(k)
 		w.string(v)
 	}
-	w.string()
+	w.string("")
 	if err := cn.sendStartupPacket(w); err != nil {
 		panic(err)
 	}
@@ -1472,7 +1472,7 @@ func QuoteIdentifier(name string) string {
 	if end > -1 {
 		name = name[:end]
 	}
-	return `"` + strings.Replace(name, `"`, ``, -1) + `"`
+	return `"` + strings.Replace(name, `"`, `""`, -1) + `"`
 }
 
 func md5s(s string) string {

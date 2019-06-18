@@ -16,9 +16,9 @@ func userCurrent() (string, error) {
 	}
 
 	name := os.Getenv("USER")
-	if name !=  {
+	if name != "" {
 		return name, nil
 	}
 
-	return , ErrCouldNotDetectUsername
+	return "", ErrCouldNotDetectUsername
 }

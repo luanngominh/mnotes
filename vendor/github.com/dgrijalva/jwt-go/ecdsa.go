@@ -104,12 +104,12 @@ func (m *SigningMethodECDSA) Sign(signingString string, key interface{}) (string
 	case *ecdsa.PrivateKey:
 		ecdsaKey = k
 	default:
-		return , ErrInvalidKeyType
+		return "", ErrInvalidKeyType
 	}
 
 	// Create the hasher
 	if !m.Hash.Available() {
-		return , ErrHashUnavailable
+		return "", ErrHashUnavailable
 	}
 
 	hasher := m.Hash.New()
@@ -120,7 +120,7 @@ func (m *SigningMethodECDSA) Sign(signingString string, key interface{}) (string
 		curveBits := ecdsaKey.Curve.Params().BitSize
 
 		if m.CurveBits != curveBits {
-			return , ErrInvalidKey
+			return "", ErrInvalidKey
 		}
 
 		keyBytes := curveBits / 8
@@ -143,6 +143,6 @@ func (m *SigningMethodECDSA) Sign(signingString string, key interface{}) (string
 
 		return EncodeSegment(out), nil
 	} else {
-		return , err
+		return "", err
 	}
 }
