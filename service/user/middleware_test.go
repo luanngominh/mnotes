@@ -12,7 +12,7 @@ func Test_validationMiddleware_Active(t *testing.T) {
 		ActiveFunc: func(ctx context.Context, userID string, verifyCode string) (*model.User, error) {
 			return nil, nil
 		},
-		GetFunc: func(ctx context.Context, query *userQuery) ([]*model.User, error) {
+		GetFunc: func(ctx context.Context, query *UserQuery) ([]*model.User, error) {
 			users := []*model.User{
 				&model.User{},
 				&model.User{},
@@ -24,7 +24,7 @@ func Test_validationMiddleware_Active(t *testing.T) {
 		ActiveFunc: func(ctx context.Context, userID string, verifyCode string) (*model.User, error) {
 			return nil, nil
 		},
-		GetFunc: func(ctx context.Context, query *userQuery) ([]*model.User, error) {
+		GetFunc: func(ctx context.Context, query *UserQuery) ([]*model.User, error) {
 			users := []*model.User{}
 			return users, nil
 		},
@@ -53,7 +53,7 @@ func Test_validationMiddleware_Active(t *testing.T) {
 		{
 			name: "Empty user id",
 			args: args{
-				userID:     ,
+				userID:     "",
 				verifyCode: "123455",
 			},
 			wantErr:          true,
@@ -63,7 +63,7 @@ func Test_validationMiddleware_Active(t *testing.T) {
 			name: "Empty user verify code",
 			args: args{
 				userID:     "7521bd92-91ab-4948-b4f1-b16b2dd9f47b",
-				verifyCode: ,
+				verifyCode: "",
 			},
 			wantErr:          true,
 			checkUserIDExist: false,
@@ -71,8 +71,8 @@ func Test_validationMiddleware_Active(t *testing.T) {
 		{
 			name: "Empty user verify code and userID",
 			args: args{
-				userID:     ,
-				verifyCode: ,
+				userID:     "",
+				verifyCode: "",
 			},
 			wantErr:          true,
 			checkUserIDExist: false,

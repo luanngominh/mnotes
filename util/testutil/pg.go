@@ -31,10 +31,10 @@ func MigrateTable(db *gorm.DB) {
 func CreateTestDatabase(t *testing.T) (*gorm.DB, string, func()) {
 	testingHost := fmt.Sprintf("%s", dbHost)
 	testingPort := fmt.Sprintf("%d", dbPort)
-	if os.Getenv("POSTGRES_TESTING_HOST") !=  {
+	if os.Getenv("POSTGRES_TESTING_HOST") != "" {
 		testingHost = os.Getenv("POSTGRES_TESTING_HOST")
 	}
-	if os.Getenv("POSTGRES_TESTING_PORT") !=  {
+	if os.Getenv("POSTGRES_TESTING_PORT") != "" {
 		testingPort = os.Getenv("POSTGRES_TESTING_PORT")
 	}
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", testingHost, testingPort, dbUser, dbPassword, dbName)
